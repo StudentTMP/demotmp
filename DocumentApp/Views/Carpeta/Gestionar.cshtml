@@ -1,0 +1,187 @@
+﻿
+@{
+    ViewBag.Title = "Gestionar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/bootstrap-treeview.css" rel="stylesheet" />
+<script src="~/scripts/bootstrap-treeview.js"></script>
+<script src="~/scripts/bootstrap-filestyle.min.js"></script>
+
+<p></p>
+<br />
+
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title">Gesti&oacute;n de carpetas generadas</h3>
+        <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-4">
+                <div id="treeview5" class=""></div>
+            </div>
+            <!-- right column -->
+            <div class="col-md-8">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h5 class="modal-title text-bold">Documentos Publicados</h5>
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+
+                        <table id="mitabla" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10px">#</th>
+                                    <th>Nombre</th>
+                                    <th>Tipo</th>
+                                    <th style="width: 40px">Acci&oacute;n</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+
+                    </div>
+                </div><!-- /.box -->
+            </div>
+        </div>
+    </div>
+    <div class="box-footer">
+        Para administrar <a href="#">carpetas</a> utilice las opciones del menu.
+    </div>
+</div>
+
+<!--INI.Modal-->
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h5 class="modal-title">Modal title</h5>
+            </div>
+            <div class="modal-body">
+                <!-- Custom Tabs (Pulled to the right) -->
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs pull-right">
+                        <li class="active"><a href="#tab_1-1" data-toggle="tab">Cargar Documento</a></li>
+                        <li><a href="#tab_2-2" data-toggle="tab">Agregar Carpeta</a></li>
+                        <li id="tab_name"><a href="#tab_3-2" data-toggle="tab">Actualizar Nombre</a></li>
+                        <li class="pull-left header"><i class="fa fa-cogs"></i> Opciones</li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_1-1">
+                            <b>Cargar nuevo documento:</b>
+                            <p>
+                                Para realizar la carga de un nuevo documento a esta carpeta, deber&aacute; Elegir el archivo.
+                            </p>
+                            <input type="file" class="filestyle" data-placeholder="Seleccione el documento..." data-size="sm" data-iconName="fa fa-upload" data-buttonText="Elegir Archivo">
+                        <br />
+
+                        </div><!-- /.tab-pane -->
+                        <div class="tab-pane" id="tab_2-2">
+                            <p>Bloque para Agregar Nueva carpeta</p>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-folder"></i></span>
+                                <input type="text" class="form-control" placeholder="Agregar Nueva Carpeta">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-info btn-flat" type="button">Agregar!</button>
+                                </span>
+                            </div>
+                        </div><!-- /.tab-pane -->
+                        <div class="tab-pane" id="tab_3-2">
+                            <p>Bloque para actualizar el nombre del documento</p>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>
+                                <input type="text" class="form-control" placeholder="Actualizar Nombre de Carpeta">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-info btn-flat" type="button">Actualizar!</button>
+                                </span>
+                            </div>
+                        </div><!-- /.tab-pane -->
+                    </div><!-- /.tab-content -->
+                </div><!-- nav-tabs-custom -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary">Listo</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!--FIN.Modal-->
+
+<script type="text/javascript">
+
+    $(function () {
+
+        var defaultData;
+        var url = '@Url.Action("GetTreeviewFiles", "Carpeta")';
+
+        $.getJSON(url, function (data) {
+
+            defaultData = JSON.stringify(data);
+            $('#treeview5').treeview({
+                color: "#428bca",
+                expandIcon: 'glyphicon glyphicon-chevron-right',
+                collapseIcon: 'glyphicon glyphicon-chevron-down',
+                nodeIcon: 'glyphicon glyphicon-folder-open',
+                selectedIcon: 'glyphicon glyphicon-ok',
+                //enableLinks: 'true',
+                data: defaultData,
+                onNodeSelected: function (event, data) {
+
+                    if (data.text == " ROOT") {
+                        $('#tab_name').hide();
+                    }
+                    else {
+                        $('#tab_name').show();
+                    }
+
+                    $('#myModal').modal('show');
+                    $('#myModal').find('.modal-title').text('Carpeta: ' + data.text);
+                    fnMostrarDetalleDocumentos(data.id);
+                }
+            });
+
+        });
+
+        $(".dropdown-menu li a").click(function () {
+            var selText = $(this).text();
+            $(this).parents('.btn-group').find('.dropdown-toggle').html(selText + ' <span class="caret"></span>');
+        });
+
+        $("#btnSearch").click(function () {
+            alert($('.btn-select').text() + ", " + $('.btn-select2').text());
+        });
+
+        function BuildTreenodes() {
+            var url = '@Url.Action("GetTreeviewFiles", "Carpeta")';
+            alert(url.toString);
+        }
+
+    });
+
+    function fnMostrarDetalleDocumentos(id) {
+        var url = '@Url.Action("GetAllDocumentosPorCarpeta", "Carpeta",new RouteValueDictionary (new { id="id"}))'.replace("id", id);
+        
+        var defaultData;
+
+        $.getJSON(url, function (data) {
+
+            $('#mitabla').find('tbody').children().remove();
+
+            $.each(data, function (i, item) {
+
+                $('#mitabla').find('tbody')
+                .append('<tr><td>' + item.nro + '</td><td>' + item.documento + '</td><td>' + item.tipoDocumento + '</td><td><a class="btn btn-sm bg-blue-gradient"><i class="fa fa-download sm" aria-hidden="true"></i> Descargar</a></td></tr>')
+                
+            });
+           
+        })
+    };
+
+</script>
