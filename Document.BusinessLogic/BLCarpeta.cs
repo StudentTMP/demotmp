@@ -30,6 +30,11 @@ namespace Document.BusinessLogic
             return new DACarpeta().ModificarCarpeta(oParametro);
         }
 
+        public bool ModificarCarpetaGestion(BECarpeta oParametro)
+        {
+            return new DACarpeta().ModificarCarpetaGestion(oParametro);
+        }
+
         public BECarpeta ObtenerCarpeta(int cod_carpeta)
         {
             return new DACarpeta().ObtenerCarpeta(cod_carpeta);

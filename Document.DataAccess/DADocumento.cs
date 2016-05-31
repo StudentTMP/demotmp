@@ -30,10 +30,11 @@ namespace Document.DataAccess
                     {
                         ocmd.CommandType = CommandType.StoredProcedure;
                         ocmd.Parameters.Add("@p_gls_nombre_documento", NpgsqlDbType.Varchar).Value = oParametro.gls_nombre_documento;
+                        ocmd.Parameters.Add("@p_gls_nombre_archivo", NpgsqlDbType.Varchar).Value = oParametro.gls_nombre_archivo;
                         ocmd.Parameters.Add("@p_cod_tipo_documento", NpgsqlDbType.Integer).Value = oParametro.cod_tipo_documento;
-                        ocmd.Parameters.Add("@p_cod_propietario_documento", NpgsqlDbType.Integer).Value = oParametro.cod_propietario;
+                        ocmd.Parameters.Add("@p_cod_propietario", NpgsqlDbType.Integer).Value = oParametro.cod_propietario;
                         ocmd.Parameters.Add("@p_fec_vigencia", NpgsqlDbType.Date).Value = oParametro.fec_vigencia;
-                        //ocmd.Parameters.Add("@p_gls_ruta_documento", NpgsqlDbType.Varchar).Value = oParametro.gls_ruta_documento;
+                        ocmd.Parameters.Add("@p_cod_carpeta", NpgsqlDbType.Integer).Value = oParametro.cod_carpeta;
                         ocmd.Parameters.Add("@p_aud_usr_ingreso", NpgsqlDbType.Varchar).Value = oParametro.aud_usr_ingreso;
 
                         using (NpgsqlDataReader odr = ocmd.ExecuteReader())
@@ -146,6 +147,44 @@ namespace Document.DataAccess
 
                             if (!Convert.IsDBNull(odr["aud_fec_modificacion"]))
                                 oItemResult.aud_fec_modificacion = Convert.ToDateTime(odr["aud_fec_modificacion"]);
+
+                        }
+                        odr.Close();
+                    }
+                }
+                tran.Commit();
+                ocn.Close();
+            }
+
+            return oItemResult;
+        }
+
+        public BEDocumento ObtenerDocumentoDownload(int cod_documento)
+        {
+            BEDocumento oItemResult = new BEDocumento();
+
+            using (NpgsqlConnection ocn = new NpgsqlConnection(Util.getConnection()))
+            {
+                ocn.Open();
+                NpgsqlTransaction tran = ocn.BeginTransaction();
+                using (NpgsqlCommand ocmd = new NpgsqlCommand("public.func_obtener_doc_documento_download", ocn))
+                {
+                    ocmd.Parameters.Add("@p_cod_documento", NpgsqlDbType.Integer).Value = cod_documento;
+                    ocmd.CommandType = CommandType.StoredProcedure;
+
+                    using (NpgsqlDataReader odr = ocmd.ExecuteReader())
+                    {
+                        while (odr.Read())
+                        {
+
+                            if (!Convert.IsDBNull(odr["cod_documento"]))
+                                oItemResult.cod_documento = Convert.ToInt32(odr["cod_documento"]);
+
+                            if (!Convert.IsDBNull(odr["gls_nombre_documento"]))
+                                oItemResult.gls_nombre_documento = odr["gls_nombre_documento"].ToString();
+
+                            if (!Convert.IsDBNull(odr["gls_nombre_archivo"]))
+                                oItemResult.gls_nombre_archivo = odr["gls_nombre_archivo"].ToString();
 
                         }
                         odr.Close();

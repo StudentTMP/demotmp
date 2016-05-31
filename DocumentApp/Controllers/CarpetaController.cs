@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using DocumentApp.Models;
 using Document.BusinessEntity;
 using Document.BusinessLogic;
+using System.IO;
 
 namespace DocumentApp.Controllers
 {
@@ -15,6 +16,61 @@ namespace DocumentApp.Controllers
         public ActionResult Gestionar()
         {
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult Subir(HttpPostedFileBase archivo, string tdescripcion, string tcodtipodoc,string tcodpropietary, string tfvigenci, string tidcarpeta)
+        {
+            BLDocumento oLogicDoc = new BLDocumento();
+            BEDocumento odocument = new BEDocumento();
+
+            //registro de la informacion
+            string nombreArchivo = archivo.FileName.ObtenerMD5() + Path.GetExtension(archivo.FileName);
+
+            odocument.gls_nombre_documento = tdescripcion;
+            odocument.gls_nombre_archivo = nombreArchivo;
+            odocument.cod_tipo_documento = Convert.ToInt16(tcodtipodoc);
+            odocument.cod_propietario = Convert.ToInt16(tcodpropietary);
+            odocument.cod_carpeta = Convert.ToInt16(tidcarpeta);
+            odocument.fec_vigencia = Convert.ToDateTime(tfvigenci);
+            odocument.aud_usr_ingreso = ".NET";// UsuarioActual;
+
+            int idCodigo = oLogicDoc.RegistrarDocumento(odocument);
+
+            if (idCodigo > 0)
+            {
+                //Si el documento se registro correctamente en la BD, se procede con la Carga del Archivo al Servidor
+                archivo.SaveAs(Path.Combine(Server.MapPath("~/Archivos"), nombreArchivo));
+            }
+
+            return RedirectToAction("Gestionar", "Carpeta");
+            //return Content(Convert.ToString(idCodigo));
+        }
+
+        public FileResult Download(string code)
+        {
+            BEDocumento odownload = new BEDocumento();
+            BLDocumento oldownload = new BLDocumento();
+
+            odownload = oldownload.ObtenerDocumentoDownload(Convert.ToInt16(code));
+            string miruta = Server.MapPath("~") + "\\Archivos\\";
+
+            string getExtension = Path.GetExtension(miruta + odownload.gls_nombre_archivo);
+
+            byte[] fileBytes = System.IO.File.ReadAllBytes(miruta + odownload.gls_nombre_archivo);
+            string fileName = odownload.gls_nombre_documento + getExtension;
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+        }
+
+        public JsonResult CreateNewFolder(string idFolderPadre, string nameFolder)
+        {
+            BLCarpeta lgFolder = new BLCarpeta();
+            BECarpeta newFolder = new BECarpeta();
+            newFolder.cod_carpeta_padre = Convert.ToInt16(idFolderPadre);
+            newFolder.gls_ruta_carpeta = nameFolder;
+            newFolder.aud_usr_ingreso = ".NET";
+            int idFolder = lgFolder.RegistrarCarpeta(newFolder);
+            return Json(idFolder, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetTreeviewFiles()
@@ -107,6 +163,64 @@ namespace DocumentApp.Controllers
             }
 
             return Json(Documentos, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetAllTipoDocumentos()
+        {
+            List<TipoDocumentoViewModel> Lista = new List<TipoDocumentoViewModel>();
+            TipoDocumentoViewModel tipoDocumento;
+
+            List<BETipoDocumento> oListaTipoDocumento;
+            BLTipoDocumento oBLTipoDocumento = new BLTipoDocumento();
+            oListaTipoDocumento = oBLTipoDocumento.ListarTipoDocumento();
+
+            foreach (BETipoDocumento item in oListaTipoDocumento)
+            {
+                tipoDocumento = new TipoDocumentoViewModel();
+                tipoDocumento.codigo = item.cod_tipo_documento;
+                tipoDocumento.descripcion = item.gls_tipo_documento;
+                tipoDocumento.estado = item.cod_estado_registro;
+                Lista.Add(tipoDocumento);
+            }
+
+            return Json(Lista, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetAllPropietario()
+        {
+            List<PropietarioViewModel> Lista = new List<PropietarioViewModel>();
+            PropietarioViewModel propietario;
+
+            List<BEPropietario> oListaPropietario;
+            BLPropietario oBLPropietario = new BLPropietario();
+            oListaPropietario = oBLPropietario.ListarPropietario();
+
+            foreach (BEPropietario item in oListaPropietario)
+            {
+                propietario = new PropietarioViewModel();
+                propietario.codigo = item.cod_propietario;
+                propietario.descripcion = item.gls_propietario;
+                propietario.estado = item.cod_estado_registro;
+                Lista.Add(propietario);
+            }
+
+            return Json(Lista, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult updateNameFolder(string id, string desc)
+        {
+            bool estadoUpdate = false;
+            BLCarpeta oBLCarpeta = new BLCarpeta();
+            BECarpeta oitem = new BECarpeta();
+
+            oitem.cod_carpeta = Convert.ToInt16(id);
+            oitem.gls_ruta_carpeta = desc;
+            oitem.cod_estado_registro = 1;
+            oitem.aud_usr_modificacion = "APP.NET";
+
+            estadoUpdate = oBLCarpeta.ModificarCarpetaGestion(oitem);
+
+            return Json(estadoUpdate, JsonRequestBehavior.AllowGet);
         }
 
     }

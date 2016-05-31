@@ -40,6 +40,11 @@ namespace Document.BusinessLogic
             return new DADocumento().ObtenerDocumento(cod_documento);
         }
 
+        public BEDocumento ObtenerDocumentoDownload(int cod_documento)
+        {
+            return new DADocumento().ObtenerDocumentoDownload(cod_documento);
+        }
+
         /// <summary>
         /// Listado de documentos
         /// </summary>

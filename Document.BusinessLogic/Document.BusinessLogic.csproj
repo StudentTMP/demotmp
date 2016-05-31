@@ -43,6 +43,8 @@
   <ItemGroup>
     <Compile Include="BLCarpeta.cs" />
     <Compile Include="BLDocumento.cs" />
+    <Compile Include="BLPropietario.cs" />
+    <Compile Include="BLTipoDocumento.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

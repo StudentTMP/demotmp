@@ -10,6 +10,5 @@ namespace DocumentApp.Models
         public int id { get; set; }
         public string text { get; set; }
         public List<CarpetaViewModel> nodes { get; set; }
-
     }
 }

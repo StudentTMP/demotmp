@@ -74,7 +74,6 @@ namespace Document.DataAccess
                         ocmd.Parameters.Add("@p_gls_ruta_carpeta", NpgsqlDbType.Varchar).Value = oParametro.gls_ruta_carpeta;
                         ocmd.Parameters.Add("@p_cod_estado_registro", NpgsqlDbType.Integer).Value = oParametro.cod_estado_registro;
                         ocmd.Parameters.Add("@p_cod_carpeta_padre", NpgsqlDbType.Integer).Value = oParametro.cod_carpeta_padre;
-                        ocmd.Parameters.Add("@p_aud_usr_modificacion", NpgsqlDbType.Varchar).Value = oParametro.aud_usr_modificacion;
 
                         ocn.Open();
                         ocmd.ExecuteNonQuery();
@@ -87,6 +86,36 @@ namespace Document.DataAccess
             {
                 throw ex;
                 //estadoIngreso = false;
+            }
+            return estadoIngreso;
+        }
+
+        public bool ModificarCarpetaGestion(BECarpeta oParametro)
+        {
+            bool estadoIngreso = false;
+            try
+            {
+                using (NpgsqlConnection ocn = new NpgsqlConnection(Util.getConnection()))
+                {
+                    using (NpgsqlCommand ocmd = new NpgsqlCommand("public.func_modificar_doc_carpeta_desc", ocn))
+                    {
+                        ocmd.CommandType = CommandType.StoredProcedure;
+                        ocmd.Parameters.Add("@p_cod_carpeta", NpgsqlDbType.Integer).Value = oParametro.cod_carpeta;
+                        ocmd.Parameters.Add("@p_gls_ruta_carpeta", NpgsqlDbType.Varchar).Value = oParametro.gls_ruta_carpeta;
+                        ocmd.Parameters.Add("@p_cod_estado_registro", NpgsqlDbType.Integer).Value = oParametro.cod_estado_registro;
+                        ocmd.Parameters.Add("@p_aud_usr_modificacion", NpgsqlDbType.Varchar).Value = oParametro.aud_usr_modificacion;
+
+                        ocn.Open();
+                        ocmd.ExecuteNonQuery();
+                        estadoIngreso = true;
+                    }
+                    ocn.Close();
+                }
+            }
+            catch (Exception)
+            {
+                //throw ex;
+                estadoIngreso = false;
             }
             return estadoIngreso;
         }
