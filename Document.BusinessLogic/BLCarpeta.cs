@@ -21,6 +21,17 @@ namespace Document.BusinessLogic
         }
 
         /// <summary>
+        /// ELiminar Carpeta: Solo se elimina si dicha carpeta no tiene documentos ni subcarpetas.
+        /// (esto es una medida de seguridad para evitar eliminar documentos publicados)
+        /// </summary>
+        /// <param name="oParametro">Codigo de la Carpeta a eliminar</param>
+        /// <returns>1 ELiminado Correctamente, -1 Debe eliminar Sub-Carpetas o Documentos existentes</returns>
+        public int EliminarCarpeta(BECarpeta oParametro)
+        {
+            return new DACarpeta().EliminarCarpeta(oParametro);
+        }
+
+        /// <summary>
         /// Modifica los datos del registro carpeta
         /// </summary>
         /// <param name="oParametro">Codigo de carpeta a modificar</param>

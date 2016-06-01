@@ -56,6 +56,41 @@ namespace Document.DataAccess
         }
 
         /// <summary>
+        /// ELiminar Carpeta: Solo se elimina si dicha carpeta no tiene documentos ni subcarpetas.
+        /// (esto es una medida de seguridad para evitar eliminar documentos publicados)
+        /// </summary>
+        /// <param name="oParametro">Codigo de la Carpeta a eliminar</param>
+        /// <returns>1 ELiminado Correctamente, -1 Debe eliminar Sub-Carpetas o Documentos existentes</returns>
+        public int EliminarCarpeta(BECarpeta oParametro)
+        {
+            int iResultado;
+
+            try
+            {
+                using (NpgsqlConnection ocn = new NpgsqlConnection(Util.getConnection()))
+                {
+                    using (NpgsqlCommand ocmd = new NpgsqlCommand("public.func_delete_doc_carpeta", ocn))
+                    {
+                        ocmd.CommandType = CommandType.StoredProcedure;
+                        ocmd.Parameters.Add("@p_cod_carpeta", NpgsqlDbType.Integer).Value = oParametro.cod_carpeta;
+                        ocmd.Parameters.Add("@p_aud_usr_modificacion", NpgsqlDbType.Varchar).Value = oParametro.aud_usr_modificacion;
+
+                        ocn.Open();
+                        iResultado = ocmd.ExecuteNonQuery();
+                    }
+                    ocn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+                //estadoIngreso = false;
+            }
+
+            return iResultado;
+        }
+
+        /// <summary>
         /// Modifica los datos del registro carpeta
         /// </summary>
         /// <param name="oParametro">Codigo de carpeta a modificar</param>

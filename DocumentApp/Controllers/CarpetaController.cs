@@ -207,6 +207,21 @@ namespace DocumentApp.Controllers
             return Json(Lista, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult deleteFolder(string id)
+        {
+            int iResult;
+
+            BLCarpeta oBLCarpeta = new BLCarpeta();
+            BECarpeta oitem = new BECarpeta();
+
+            oitem.cod_carpeta = Convert.ToInt16(id);
+            oitem.aud_usr_modificacion = "APP.DLT";
+
+            iResult = oBLCarpeta.EliminarCarpeta(oitem);
+
+            return Json(iResult,JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult updateNameFolder(string id, string desc)
         {
             bool estadoUpdate = false;
