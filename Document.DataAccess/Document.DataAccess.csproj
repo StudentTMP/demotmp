@@ -50,6 +50,7 @@
     <Compile Include="DADocumento.cs" />
     <Compile Include="DAPropietario.cs" />
     <Compile Include="DATipoDocumento.cs" />
+    <Compile Include="DAUsuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>

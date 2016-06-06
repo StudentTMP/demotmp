@@ -1,5 +1,6 @@
 ﻿using Document.BusinessEntity;
 using Npgsql;
+using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -50,5 +51,42 @@ namespace Document.DataAccess
 
             return oListado;
         }
+
+        public int Registrar(BEPropietario propietario)
+        {
+            int idRegistro = 0;
+            try
+            {
+                using (NpgsqlConnection ocn = new NpgsqlConnection(Util.getConnection()))
+                {
+                    ocn.Open();
+                    NpgsqlTransaction tran = ocn.BeginTransaction();
+                    using (NpgsqlCommand ocmd = new NpgsqlCommand("public.func_registrar_doc_propietario", ocn))
+                    {
+                        ocmd.CommandType = CommandType.StoredProcedure;
+                        ocmd.Parameters.Add("@p_gls_propietario", NpgsqlDbType.Varchar).Value = propietario.gls_propietario;
+                        ocmd.Parameters.Add("@p_aud_usr_ingreso", NpgsqlDbType.Varchar).Value = propietario.aud_usr_ingreso;
+
+                        using (NpgsqlDataReader odr = ocmd.ExecuteReader())
+                        {
+                            while (odr.Read())
+                            {
+                                idRegistro = Convert.ToInt32(odr[0]);
+                            }
+                        }
+
+                    }
+                    tran.Commit();
+                    ocn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+                //estadoIngreso = false;
+            }
+            return idRegistro;
+        }
+
     }
 }

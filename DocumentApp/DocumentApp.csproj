@@ -352,6 +352,10 @@
     <Content Include="Content\bootstrap\alerts.less" />
     <Content Include="Content\_bootstrap-datetimepicker.less" />
     <Content Include="Content\bootstrap-datetimepicker-build.less" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Propietario\Buscar.cshtml" />
+    <Content Include="Views\Propietario\Nuevo.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -401,6 +405,9 @@
     <Compile Include="Controllers\CarpetaController.cs" />
     <Compile Include="Controllers\Extensiones.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\PropietarioController.cs" />
+    <Compile Include="Controllers\Util.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -408,6 +415,7 @@
     <Compile Include="Models\DocumentoViewModel.cs" />
     <Compile Include="Models\PropietarioViewModel.cs" />
     <Compile Include="Models\TipoDocumentoViewModel.cs" />
+    <Compile Include="Models\UsuarioLoginViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
