@@ -356,6 +356,9 @@
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Propietario\Buscar.cshtml" />
     <Content Include="Views\Propietario\Nuevo.cshtml" />
+    <Content Include="Views\Errores\NoEncontrado.cshtml" />
+    <Content Include="Views\Errores\NoAutorizado.cshtml" />
+    <Content Include="Views\Errores\Inesperado.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -403,6 +406,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CarpetaController.cs" />
+    <Compile Include="Controllers\ErroresController.cs" />
     <Compile Include="Controllers\Extensiones.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -413,6 +417,7 @@
     </Compile>
     <Compile Include="Models\CarpetaViewModel.cs" />
     <Compile Include="Models\DocumentoViewModel.cs" />
+    <Compile Include="Models\ErrorViewModel.cs" />
     <Compile Include="Models\PropietarioViewModel.cs" />
     <Compile Include="Models\TipoDocumentoViewModel.cs" />
     <Compile Include="Models\UsuarioLoginViewModel.cs" />

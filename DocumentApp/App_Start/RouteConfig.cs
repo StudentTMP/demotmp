@@ -14,6 +14,12 @@ namespace DocumentApp
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "Propietarios",
+                url: "Propietario",
+                defaults: new { controller = "Propietario", action = "Buscar" }
+                );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Login", action = "Index", id = UrlParameter.Optional }
