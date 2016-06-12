@@ -28,7 +28,15 @@
         <div class="lockscreen-name">@Model.PrimerNombreApellido</div>
         <div class="lockscreen-item">
             <div class="lockscreen-image">
-                <img src="~/images/per_User.png" alt="User Image">
+                @if (Model.idRol == 1)
+                {
+                    <img src="~/images/admin-icon-profile.png" alt="User Image">
+                }
+                else
+                {
+                    <img src="~/images/user-icon-profile.png" alt="User Image">
+                }
+                <!--<img src="~/images/per_User.png" alt="User Image">-->
             </div>
 
             <!--Inicio Formulario Ingreso-->
@@ -42,26 +50,12 @@
                     </div>
                 </div>
             }
-            <!--
-            <form class="lockscreen-credentials">
-                <div class="input-group">
-                    <button class="form-control btn btn-block"><small class="text-center text-black"><i>Ingresar a mi cuenta&hellip;</i></small></button>
-                    <div class="input-group-btn">
-                        <button class="btn"><i class="fa fa-arrow-right text-muted"></i></button>
-                    </div>
-                </div>
-            </form>
-            -->
             <!--Final Formulario Ingreso-->
 
         </div>
 
-        <div class="help-block text-center">
-            Enter your password to retrieve your session
-        </div>
-
         <div class="text-center">
-            <a href="login.html">o Iniciar con una cuenta diferente</a>
+            <a href="@Url.Action("Login","Login")">o Iniciar con una cuenta diferente</a>
         </div>
 
         <div class="lockscreen-footer text-center">

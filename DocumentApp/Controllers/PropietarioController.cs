@@ -30,15 +30,47 @@ namespace DocumentApp.Controllers
             UsuarioLoginViewModel UsuarioActual;
             UsuarioActual = (UsuarioLoginViewModel)Session["objUsuario"];
 
-            BEPropietario nuevo = new BEPropietario();
-            nuevo.gls_propietario = propietario;
-            nuevo.aud_usr_ingreso = UsuarioActual.Codigo;
+            BEPropietario item = new BEPropietario();
+            item.gls_propietario = propietario;
+            item.aud_usr_ingreso = UsuarioActual.Codigo;
 
             BLPropietario oBLPropietario = new BLPropietario();
-            int iResultado = oBLPropietario.Registrar(nuevo);
+            int iResultado = oBLPropietario.Registrar(item);
 
             return RedirectToAction("Buscar","Propietario");
             //return Json(iResultado, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult Actualizar(string code, string descripcion)
+        {
+            UsuarioLoginViewModel UsuarioActual;
+            UsuarioActual = (UsuarioLoginViewModel)Session["objUsuario"];
+
+            BEPropietario propietario = new BEPropietario();
+            propietario.cod_propietario = Convert.ToInt16(code);
+            propietario.gls_propietario = descripcion;
+            propietario.aud_usr_modificacion = UsuarioActual.Codigo;
+
+            BLPropietario oBLPropietario = new BLPropietario();
+            int iResultado = oBLPropietario.Actualizar(propietario);
+
+            return RedirectToAction("Buscar", "Propietario");
+        }
+
+        public JsonResult Eliminar(string code)
+        {
+            UsuarioLoginViewModel UsuarioActual;
+            UsuarioActual = (UsuarioLoginViewModel)Session["objUsuario"];
+
+            BEPropietario propietario = new BEPropietario();
+            propietario.cod_propietario = Convert.ToInt16(code);
+            propietario.aud_usr_modificacion = UsuarioActual.Codigo;
+
+            BLPropietario oBLPropietario = new BLPropietario();
+            int iResultado = oBLPropietario.Actualizar(propietario);
+
+            return Json(iResultado, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

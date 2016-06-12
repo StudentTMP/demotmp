@@ -20,5 +20,15 @@ namespace Document.BusinessLogic
             return new DAPropietario().Registrar(propietario);
         }
 
+        public int Actualizar(BEPropietario propietario)
+        {
+            return new DAPropietario().Actualizar(propietario);
+        }
+
+        public int Eliminar(BEPropietario propietario)
+        {
+            return new DAPropietario().Eliminar(propietario);
+        }
+
     }
 }

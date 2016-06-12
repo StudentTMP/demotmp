@@ -54,6 +54,12 @@ namespace Document.DataAccess
                             if (!Convert.IsDBNull(odr["gls_area"]))
                                 oUsuario.gls_area = odr["gls_area"].ToString();
 
+                            if (!Convert.IsDBNull(odr["cod_rol"]))
+                                oUsuario.cod_rol = Convert.ToInt32(odr["cod_rol"]);
+
+                            if (!Convert.IsDBNull(odr["gls_rol"]))
+                                oUsuario.gls_rol = odr["gls_rol"].ToString();
+
                             if (!Convert.IsDBNull(odr["correo"]))
                                 oUsuario.correo = odr["correo"].ToString();
 

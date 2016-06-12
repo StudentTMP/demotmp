@@ -171,7 +171,11 @@
     <Content Include="css\font-awesome.css" />
     <Content Include="css\font-awesome.min.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
+    <Content Include="images\admin-icon-profile-small.png" />
+    <Content Include="images\admin-icon-profile.png" />
     <Content Include="images\per_User.png" />
+    <Content Include="images\user-icon-profile-small.png" />
+    <Content Include="images\user-icon-profile.png" />
     <Content Include="packages.config" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -355,10 +359,10 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Propietario\Buscar.cshtml" />
-    <Content Include="Views\Propietario\Nuevo.cshtml" />
     <Content Include="Views\Errores\NoEncontrado.cshtml" />
     <Content Include="Views\Errores\NoAutorizado.cshtml" />
     <Content Include="Views\Errores\Inesperado.cshtml" />
+    <Content Include="Views\Login\Login.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -418,6 +422,7 @@
     <Compile Include="Models\CarpetaViewModel.cs" />
     <Compile Include="Models\DocumentoViewModel.cs" />
     <Compile Include="Models\ErrorViewModel.cs" />
+    <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\PropietarioViewModel.cs" />
     <Compile Include="Models\TipoDocumentoViewModel.cs" />
     <Compile Include="Models\UsuarioLoginViewModel.cs" />
@@ -426,6 +431,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Archivos\" />
+    <Folder Include="LogApp\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Document.BusinessEntity\Document.BusinessEntity.csproj">

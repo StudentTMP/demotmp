@@ -58,7 +58,7 @@
                             <i class="fa fa-th"></i> <span>Gestor de Documentos</span><i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="Carpeta/Gestionar"><i class="fa fa-folder-open" aria-hidden="true"></i> Carpetas</a></li>
+                            <li><a href="@Url.Action("Gestionar","Carpeta")"><i class="fa fa-folder-open" aria-hidden="true"></i> Carpetas</a></li>
                             <li><a href="#"><i class="fa fa-file-word-o" aria-hidden="true"></i> Documentos</a></li>
                             <li><a href="#"><i class="fa fa-sitemap" aria-hidden="true"></i> Visor</a></li>
                         </ul>
@@ -68,7 +68,7 @@
                             <i class="fa fa-user" aria-hidden="true"></i> <span>Propietarios</span> <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="@Url.Action("Buscar","Propietario")"><i class="fa fa-search" aria-hidden="true"></i> Consulta</a></li>
+                            <li><a href="@Url.Action("Buscar","Propietario")"><i class="fa fa-search" aria-hidden="true"></i> Listado</a></li>
                         </ul>
                     </li>
                     <li class="treeview">
@@ -89,12 +89,7 @@
         <!--Ini.Body-->
         <div class="content-wrapper">
             <section class="content-header">
-                <!--
-                <h1>
-                    Dashboard
-                    <small>Version 2.0</small>
-                </h1>
-                -->
+
                 <ol class="breadcrumb">
                     <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
                     <li class="active">Carpetas</li>
@@ -108,7 +103,7 @@
         <!--Fin.Body-->
     </div>
     <!--Ini.Pie de Pagina-->
-    <footer class="main-footer">
+    <footer class="main-footer small">
         <div class="pull-right hidden-xs">
             <b>Version</b> 2.0
         </div>

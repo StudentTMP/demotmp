@@ -37,6 +37,8 @@ namespace DocumentApp.Controllers
                 UsuarioModel.Nombre = oBEUsuario.nombres;
                 UsuarioModel.CodigoArea = oBEUsuario.cod_area;
                 UsuarioModel.nombreArea = oBEUsuario.gls_area;
+                UsuarioModel.idRol = oBEUsuario.cod_rol;
+                UsuarioModel.nombreRol = oBEUsuario.gls_rol;
                 UsuarioModel.Correo = oBEUsuario.correo;
                 UsuarioModel.NombreCompleto = ConvertFirstLetterToUpper(UsuarioModel.Nombre + " " + UsuarioModel.ApellidoPaterno + " " + UsuarioModel.ApellidoMaterno);
                 UsuarioModel.PrimerNombreApellido = ConvertFirstLetterToUpper(NombreApellidoPrimero(UsuarioModel.Nombre, UsuarioModel.ApellidoPaterno));

@@ -16,5 +16,9 @@ namespace DocumentApp.Models
         public string Correo { get; set; }
         public string NombreCompleto { get; set; }
         public string PrimerNombreApellido { get; set; }
+
+        //ROL
+        public int idRol { get; set; }
+        public string nombreRol { get; set; }
     }
 }

@@ -15,6 +15,7 @@ namespace Document.BusinessEntity
         public int cod_area { get; set; }
         public int cod_rol { get; set; }
         public string gls_area { get; set; }
+        public string gls_rol { get; set; }
         public string ape_paterno { get; set; }
         public string ape_materno { get; set; }
         public string nombres { get; set; }

@@ -70,9 +70,7 @@ namespace Document.DataAccess
                         using (NpgsqlDataReader odr = ocmd.ExecuteReader())
                         {
                             while (odr.Read())
-                            {
                                 idRegistro = Convert.ToInt32(odr[0]);
-                            }
                         }
 
                     }
@@ -86,6 +84,70 @@ namespace Document.DataAccess
                 //estadoIngreso = false;
             }
             return idRegistro;
+        }
+
+        public int Actualizar(BEPropietario propietario)
+        {
+            int idRegistro = 0;
+            try
+            {
+                using (NpgsqlConnection ocn = new NpgsqlConnection(Util.getConnection()))
+                {
+                    ocn.Open();
+                    NpgsqlTransaction tran = ocn.BeginTransaction();
+                    using (NpgsqlCommand ocmd = new NpgsqlCommand("public.func_actualizar_doc_propietario", ocn))
+                    {
+                        ocmd.CommandType = CommandType.StoredProcedure;
+                        ocmd.Parameters.Add("@p_cod_propietario", NpgsqlDbType.Integer).Value = propietario.cod_propietario;
+                        ocmd.Parameters.Add("@p_gls_propietario", NpgsqlDbType.Varchar).Value = propietario.gls_propietario;
+                        ocmd.Parameters.Add("@p_aud_usr_modificacion", NpgsqlDbType.Varchar).Value = propietario.aud_usr_modificacion;
+
+                        using (NpgsqlDataReader odr = ocmd.ExecuteReader())
+                        {
+                            while (odr.Read())
+                                idRegistro = Convert.ToInt32(odr[0]);
+                        }
+
+                    }
+                    tran.Commit();
+                    ocn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+                //estadoIngreso = false;
+            }
+            return idRegistro;
+        }
+
+        public int Eliminar(BEPropietario propietario)
+        {
+            int iResultado;
+
+            try
+            {
+                using (NpgsqlConnection ocn = new NpgsqlConnection(Util.getConnection()))
+                {
+                    using (NpgsqlCommand ocmd = new NpgsqlCommand("public.func_delete_doc_propietario", ocn))
+                    {
+                        ocmd.CommandType = CommandType.StoredProcedure;
+                        ocmd.Parameters.Add("@p_cod_propietario", NpgsqlDbType.Integer).Value = propietario.cod_propietario;
+                        ocmd.Parameters.Add("@p_aud_usr_modificacion", NpgsqlDbType.Varchar).Value = propietario.aud_usr_modificacion;
+
+                        ocn.Open();
+                        iResultado = ocmd.ExecuteNonQuery();
+                    }
+                    ocn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+                //estadoIngreso = false;
+            }
+
+            return iResultado;
         }
 
     }

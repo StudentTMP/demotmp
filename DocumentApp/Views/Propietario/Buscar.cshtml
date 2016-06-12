@@ -118,6 +118,7 @@
                 <h5 class="modal-title"><i class="fa fa-user" aria-hidden="true"></i> Editar Propietario</h5>
             </div>
             <div class="modal-body">
+                <div id="idpropie" hidden></div>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-edit"></i></span>
                     <input id="txtEditPropietario" type="text" class="form-control" placeholder="Editar Propietario" />
@@ -135,8 +136,11 @@
 <script type="text/javascript">
 
     $("#btnAddPropietario").click(function () {
+        $("#txtNombrePropietario").val("");
         $('#myModalAddPropietario').modal('show');
-        document.getElementById("txtNombrePropietario").focus();
+        $('#myModalAddPropietario').on('shown.bs.modal', function () {
+            $("#txtNombrePropietario").focus();
+        });
     });
 
     $("#btnSavePropietario").click(function () {
@@ -161,9 +165,33 @@
 
     function jsEdicionelement(id, descripcion) {
         //alert(id+descripcion);
+        $('#idpropie').text(id);
         $('#txtEditPropietario').val(descripcion);
         $('#myModalEditPropietario').modal('show');
+        $('#myModalEditPropietario').on('shown.bs.modal', function () {
+            $("#txtEditPropietario").focus();
+        });
     };
+    
+    $("#btnUpdatePropietario").click(function () {
 
+        var codigo = $('#idpropie').text();
+        var glsPropietario = document.getElementById("txtEditPropietario").value;
+        var url = '@Url.Action("Actualizar", "Propietario")';
+
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            url: url,
+            data: '{"code":"' + codigo + '","descripcion":"' + glsPropietario + '"}',
+            datatype: 'json',
+            success: function (result) {
+                //si registro correctamente recargamos la grilla
+            },
+            error: function (xhr) {
+                alert('Error: ' + xhr.statusText);
+            }
+        });
+    });
 
 </script>
