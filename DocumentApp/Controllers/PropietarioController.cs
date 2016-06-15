@@ -67,7 +67,7 @@ namespace DocumentApp.Controllers
             propietario.aud_usr_modificacion = UsuarioActual.Codigo;
 
             BLPropietario oBLPropietario = new BLPropietario();
-            int iResultado = oBLPropietario.Actualizar(propietario);
+            int iResultado = oBLPropietario.Eliminar(propietario);
 
             return Json(iResultado, JsonRequestBehavior.AllowGet);
         }

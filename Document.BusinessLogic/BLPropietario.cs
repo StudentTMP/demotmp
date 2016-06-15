@@ -25,6 +25,11 @@ namespace Document.BusinessLogic
             return new DAPropietario().Actualizar(propietario);
         }
 
+        /// <summary>
+        /// Eliminar Propietario: eliminacion logica del registro propietario segun el codigo de registro enviado.
+        /// </summary>
+        /// <param name="propietario">parametros del propietario</param>
+        /// <returns>valor de respuesta</returns>
         public int Eliminar(BEPropietario propietario)
         {
             return new DAPropietario().Eliminar(propietario);

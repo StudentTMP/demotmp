@@ -346,7 +346,9 @@
         $("#btnAddFolder").click(function () {
 
             $('#myModalAddFolder').modal('show');
-            //$('#txtCarpetanombre').focus();
+            $('#myModalAddFolder').on('shown.bs.modal', function () {
+                $("#txtCarpetanombre").focus();
+            });
 
         });
 
@@ -356,6 +358,9 @@
             nameFolder = $('#titlecarpeta').text().trim();
             $('#txtEditCarpetanombre').val(nameFolder);
             $('#myModalEditFolder').modal('show');
+            $('#myModalEditFolder').on('shown.bs.modal', function () {
+                $("#txtEditCarpetanombre").focus();
+            });
 
         });
 
@@ -372,8 +377,10 @@
                     .attr("value", idFolder)
                     .text(nameFolder));
 
-            //$('#myModalUploadFile').find('.modal-title').text(nameFolder + ': [seleccione un documento]');
             $('#myModalUploadFile').modal('show');
+            $('#myModalUploadFile').on('shown.bs.modal', function () {
+                $("#txtNewNameFile").focus();
+            });
 
         });
 
@@ -580,9 +587,9 @@
             datatype: 'json',
             success: function (result) {
                 //escribir accion luego de la ejecucion correcta del proceso
-                //LoadFolderMain();
-                value = " " + value;
-                updateNodeText(value);
+                LoadFolderMain();
+                //value = " " + value;
+                //updateNodeText(value);
             },
             error: function (xhr) {
                 //Algun mensaje de error
