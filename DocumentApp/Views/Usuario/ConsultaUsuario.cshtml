@@ -1,0 +1,307 @@
+﻿@model IEnumerable<DocumentApp.Models.UsuarioViewModel>
+
+@*@model DocumentApp.Models.UsuarioViewModel*@
+
+@{
+    ViewBag.Title = "ConsultaUsuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/bootstrap-treeview.css" rel="stylesheet" />
+<script src="~/scripts/bootstrap-treeview.js"></script>
+<script src="~/scripts/bootstrap-filestyle.min.js"></script>
+
+<p></p>
+<br />
+
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title">Consulta de Usuarios</h3>
+        <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+        </div>
+    </div>
+    <div class="box">
+        <div class="box-header with-border">
+            <h5 class="modal-title text-bold">Lista de Usuarios</h5>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+
+            <table id="userTable" class="table table-bordered">
+                <thead>
+                <tr>
+                    <th style="width: 10px">#</th>
+                    <th>Usuario</th>
+                    <th>Area</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Usuario Ingreso</th>
+                    <th>Fecha Ingreso</th>
+
+                    <th style="width: 40px">Acci&oacute;n</th>
+                </tr>
+                </thead>
+                <tbody>
+                @if (Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr class="text small">
+                            <td style="width: 10px">
+                                @Html.DisplayFor(modelItem => item.Nro)
+                            </td>
+                            <td style="width: 10px">
+                                @Html.DisplayFor(modelItem => item.CodigoUsuario)
+                            </td>
+                            <td style="width: 10px">
+                                @Html.DisplayFor(modelItem => item.Area)
+                            </td>
+                            <td style="width: 10px">
+                                @Html.DisplayFor(modelItem => item.Rol)
+                            </td>
+                            <td style="width: 10px">
+                                @Html.DisplayFor(modelItem => item.Estado)
+                            </td>
+                            <td style="width: 10px">
+                                @Html.DisplayFor(modelItem => item.UsuarioIngreso)
+                            </td>
+                            <td style="width: 10px">
+                                @Html.DisplayFor(modelItem => item.FechaIngreso)
+                            </td>
+                            <td style="width: 160px">
+                                <div id="divbotonesAccionGrid" class="text-center btn-group-xs">
+                                    <a class="btn btn-primary btn-flat" href="javascript:void(0);" onclick="jsEdicionelement('@item.CodigoUsuario', '@item.CodigoArea', '@item.CodigoRol');">
+                                        <span class="fa fa-edit fa-lg"></span>  Editar
+                                    </a>
+                                    <a class="btn btn-danger btn-flat" href="javascript:void(0);" onclick="jsDeletelement('@item.CodigoUsuario');">
+                                        <span class="fa fa-trash-o fa-lg"></span>  Eliminar
+                                    </a>
+                                </div>
+                                <!--
+                                Html.ActionLink("Editar", "Edit", new { id = item.codigo }) |
+                                Html.ActionLink("Detalle", "Details", new { id = item.codigo }) |
+                                Html.ActionLink("Eliminar", "Delete", new { id = item.codigo })-->
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="text small text-info">No se encontraron usuarios registrados&hellip;</td>
+                    </tr>
+                }
+
+                </tbody>
+            </table>
+
+            <!-- pager -->
+
+            @if (Model.Pager.EndPage > 1)
+            {
+                <ul class="pagination">
+                    @if (Model.Pager.CurrentPage > 1)
+                    {
+                        <li>
+                            <a href="~/Home/Index">First</a>
+                        </li>
+                            <li>
+                                <a href="~/Home/Index?page=@(Model.Pager.CurrentPage - 1)">Previous</a>
+                            </li>
+                    }
+
+                    @for (var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+                    {
+                        <li class="@(page == Model.Pager.CurrentPage ? "active" : "")">
+                            <a href="~/Home/Index?page=@page">@page</a>
+                        </li>
+                    }
+
+                    @if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+                    {
+                        <li>
+                            <a href="~/Home/Index?page=@(Model.Pager.CurrentPage + 1)">Next</a>
+                        </li>
+                            <li>
+                                <a href="~/Home/Index?page=@(Model.Pager.TotalPages)">Last</a>
+                            </li>
+                    }
+                </ul>
+            }		
+        </div>
+
+
+    </div><!-- /.box -->
+</div>
+
+<div class="modal fade bootstrapmodal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close"><span>&times;</span></button>
+                <div class="modal-title"> Asignar perfiles al usuario</div>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="list-group col-md-3" id="ListaNoAsignados">
+                            <a class="list-group-item list-group-item-info"> Lista Sin asignar:</a>
+                            <a href="" class="list-group-item">Item</a>
+                            <a href="" class="list-group-item">Item 2</a>
+                            <a href="" class="list-group-item">Item 3</a>
+                            <a href="" class="list-group-item">Item 4</a>
+                        </div>
+
+                        <div class="list-group col-md-3" id="ListaAsignados">
+                            <a class="list-group-item list-group-item-info"> Lista asignados:</a>
+                            <a href="" class="list-group-item">Item</a>
+                            <a href="" class="list-group-item">Item 2</a>
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-primary">Grabar cambios</button>
+                <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL.AGREGAR-USUARIO-->
+<div id="myModalAddUsuario" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-blue-gradient">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h5 class="modal-title"><i class="fa fa-user" aria-hidden="true"></i> Registro de Usuario</h5>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-user-plus"></i></span>
+                    <input id="txtNombreUsuario" type="text" class="form-control" placeholder="Agregar Nuevo Usuario" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnSaveUsuario" class="btn btn-primary" data-dismiss="modal">Registrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL.EDITAR-USUARIO-->
+<div id="myModalEditUsuario" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-blue-gradient">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h5 class="modal-title"><i class="fa fa-user" aria-hidden="true"></i> Editar Usuario</h5>
+            </div>
+            <div class="modal-body">
+                <div id="idpropie" hidden></div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-edit"></i></span>
+                    <input id="txtEditUsuario" type="text" class="form-control" placeholder="Editar Usuario" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnUpdateUsuario" class="btn btn-primary" data-dismiss="modal">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL.ELIMINAR-USUARIO-->
+<div id="myModalDeleteUsuario" class="modal fade">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header bg-red-active">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h5 class="modal-title"><i class="fa fa-trash" aria-hidden="true"></i> Alerta!</h5>
+            </div>
+            <div class="modal-body text-center">
+                ¿Esta Seguro de eliminar el usuario?
+                <br />
+                <div id="tdelmsg"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnDeletePropOK" class="btn btn-primary" data-dismiss="modal">Eliminar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+
+<script type="text/javascript">
+
+    $(function () {
+        //fnMostrarUsuarios();
+    });
+
+
+    function fnMostrarUsuarios() {
+        var url = '@Url.Action("GetAllUsuarios", "Usuario")';
+
+        var defaultData;
+
+        $.getJSON(url,
+            function(data) {
+
+                $('#userTable').find('tbody').children().remove();
+
+                $.each(data,
+                    function(i, item) {
+
+                        $('#userTable')
+                            .find('tbody')
+                            .append('<tr><td>' +
+                                item.Nro +
+                                '</td><td>' +
+                                item.CodigoUsuario +
+                                '</td><td>' +
+                                item.Area +
+                                '</td><td>' +
+                                item.Rol +
+                                '</td><td>' +
+                                item.Estado +
+                                '</td><td>' +
+                                item.UsuarioIngreso +
+                                '</td><td>' +
+                                item.FechaIngreso +
+                                '</td><td><a class="btn btn-success" data-toggle="modal" data-target=".bootstrapmodal">' +
+                                '<span class="glyphicon glyphicon-eye-open"></span> Asignar Perfil</a></td></tr>');
+
+                    });
+
+            });
+    };
+
+    function jsEdicionelement(codUsuario, codArea, codRol) {
+        //alert(id+descripcion);
+        $('#idpropie').text(id);
+        $('#txtEditUsuario').val(codUsuario);
+        $('#myModalEditUsuario').modal('show');
+        $('#myModalEditUsuario').on('shown.bs.modal', function () {
+            $("#txtEditUsuario").focus();
+        });
+    };
+
+    function jsDeletelement(id) {
+        idUsuario = id;
+        $('#tdelmsg').text(descripcion);
+        $('#myModalDeleteUsuario').modal('show');
+    };
+
+</script>
+
+
+<h2>ConsultaUsuario</h2>

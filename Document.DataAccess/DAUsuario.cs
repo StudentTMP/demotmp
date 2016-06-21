@@ -73,5 +73,66 @@ namespace Document.DataAccess
 
             return oUsuario;
         }
+
+        /// <summary>
+        /// Listado de usuarios
+        /// </summary>
+        /// <returns>Lista de usuarios</returns>
+        public List<BEUsuario> ListarUsuarios()
+        {
+            List<BEUsuario> oListado = new List<BEUsuario>();
+            BEUsuario oItem;
+
+            using (NpgsqlConnection cnx = new NpgsqlConnection(Util.getConnection()))
+            {
+                cnx.Open();
+                NpgsqlTransaction tran = cnx.BeginTransaction();
+                using (NpgsqlCommand cmd = new NpgsqlCommand("public.func_listar_doc_usuarios", cnx))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    using (NpgsqlDataReader odr = cmd.ExecuteReader())
+                    {
+                        while (odr.Read())
+                        {
+                            oItem = new BEUsuario();
+
+                            if (!Convert.IsDBNull(odr["cod_usuario"]))
+                                oItem.cod_usuario = Convert.ToString(odr["cod_usuario"]);
+
+                            if (!Convert.IsDBNull(odr["gls_area"]))
+                                oItem.gls_area = Convert.ToString(odr["gls_area"]);
+
+                            if (!Convert.IsDBNull(odr["gls_rol"]))
+                                oItem.gls_rol = Convert.ToString(odr["gls_rol"]);
+
+                            if (!Convert.IsDBNull(odr["cod_estado_registro"]))
+                                oItem.cod_estado_registro = Convert.ToInt32(odr["cod_estado_registro"]);
+
+                            if (!Convert.IsDBNull(odr["aud_usr_ingreso"]))
+                                oItem.aud_usr_ingreso = odr["aud_usr_ingreso"].ToString();
+
+                            if (!Convert.IsDBNull(odr["aud_fec_ingreso"]))
+                                oItem.aud_fec_ingreso = Convert.ToDateTime(odr["aud_fec_ingreso"]);
+
+
+
+                            oListado.Add(oItem);
+                        }
+                        odr.Close();
+                    }
+                }
+                tran.Commit();
+                cnx.Close();
+
+
+                return oListado;
+            }
+        }
+
+
+
+
+
     }
 }

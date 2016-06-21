@@ -177,9 +177,6 @@
     <Content Include="images\user-icon-profile-small.png" />
     <Content Include="images\user-icon-profile.png" />
     <Content Include="packages.config" />
-    <Content Include="ApplicationInsights.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="scripts\bootstrap-datepicker.js" />
     <Content Include="scripts\bootstrap-datepicker.min.js" />
     <Content Include="scripts\bootstrap-datetimepicker.js" />
@@ -363,6 +360,7 @@
     <Content Include="Views\Errores\NoAutorizado.cshtml" />
     <Content Include="Views\Errores\Inesperado.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
+    <Content Include="Views\Usuario\ConsultaUsuario.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -415,6 +413,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PropietarioController.cs" />
+    <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Controllers\Util.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -423,9 +422,11 @@
     <Compile Include="Models\DocumentoViewModel.cs" />
     <Compile Include="Models\ErrorViewModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\Pager.cs" />
     <Compile Include="Models\PropietarioViewModel.cs" />
     <Compile Include="Models\TipoDocumentoViewModel.cs" />
     <Compile Include="Models\UsuarioLoginViewModel.cs" />
+    <Compile Include="Models\UsuarioViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

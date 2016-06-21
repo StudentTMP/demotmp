@@ -20,5 +20,17 @@ namespace Document.BusinessLogic
         {
             return new DAUsuario().ObtenerUsuarioLogin(usuario);
         }
+
+        /// <summary>
+        /// Registro de Documento
+        /// </summary>
+        /// <returns>Codigo generado</returns>
+        public List<BEUsuario> ListarUsuarios()
+        {
+            return new DAUsuario().ListarUsuarios();
+        }
+
+
+
     }
 }
