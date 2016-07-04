@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DocumentApp.Models.UsuarioViewModel>
+﻿@model DocumentApp.Models.UsuarioViewModel
 
 @*@model DocumentApp.Models.UsuarioViewModel*@
 
@@ -6,11 +6,6 @@
     ViewBag.Title = "ConsultaUsuario";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<link href="~/Content/bootstrap-treeview.css" rel="stylesheet" />
-<script src="~/scripts/bootstrap-treeview.js"></script>
-<script src="~/scripts/bootstrap-filestyle.min.js"></script>
-
 <p></p>
 <br />
 
@@ -21,6 +16,9 @@
             <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
             <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
         </div>
+    </div>
+    <div>
+        <button type="button" id="btnRegistroUsuario" class="btn btn-primary">Registrar Usuario</button>
     </div>
     <div class="box">
         <div class="box-header with-border">
@@ -43,9 +41,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                @if (Model.Count() > 0)
+                @if (Model.Items.Any())
                 {
-                    foreach (var item in Model)
+                    foreach (var item in Model.Items)
                     {
                         <tr class="text small">
                             <td style="width: 10px">
@@ -71,17 +69,16 @@
                             </td>
                             <td style="width: 160px">
                                 <div id="divbotonesAccionGrid" class="text-center btn-group-xs">
-                                    <a class="btn btn-primary btn-flat" href="javascript:void(0);" onclick="jsEdicionelement('@item.CodigoUsuario', '@item.CodigoArea', '@item.CodigoRol');">
+                                    <a class="btn btn-success" href="javascript:void(0);" onclick="jsAsignarelement('@item.CodigoUsuario');">
+                                        <span class="glyphicon glyphicon-eye-open"></span>  Asignar Perfil
+                                    </a>                                    
+                                    <a class="btn btn-primary btn-flat" href="javascript:void(0);" onclick="jsEdicionelement('@item.CodigoUsuario', '@item.CodigoArea', '@item.CodigoRol', '@item.Area');">
                                         <span class="fa fa-edit fa-lg"></span>  Editar
                                     </a>
                                     <a class="btn btn-danger btn-flat" href="javascript:void(0);" onclick="jsDeletelement('@item.CodigoUsuario');">
                                         <span class="fa fa-trash-o fa-lg"></span>  Eliminar
                                     </a>
                                 </div>
-                                <!--
-                                Html.ActionLink("Editar", "Edit", new { id = item.codigo }) |
-                                Html.ActionLink("Detalle", "Details", new { id = item.codigo }) |
-                                Html.ActionLink("Eliminar", "Delete", new { id = item.codigo })-->
                             </td>
                         </tr>
                     }
@@ -104,30 +101,30 @@
                     @if (Model.Pager.CurrentPage > 1)
                     {
                         <li>
-                            <a href="~/Home/Index">First</a>
+                            <a href="~/Usuario/ConsultaUsuario">First</a>
                         </li>
                             <li>
-                                <a href="~/Home/Index?page=@(Model.Pager.CurrentPage - 1)">Previous</a>
+                                <a href="~/Usuario/ConsultaUsuario?page=@(Model.Pager.CurrentPage - 1)">Previous</a>
                             </li>
                     }
 
                     @for (var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
                     {
                         <li class="@(page == Model.Pager.CurrentPage ? "active" : "")">
-                            <a href="~/Home/Index?page=@page">@page</a>
+                            <a href="~/Usuario/ConsultaUsuario?page=@page">@page</a>
                         </li>
                     }
 
                     @if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
                     {
                         <li>
-                            <a href="~/Home/Index?page=@(Model.Pager.CurrentPage + 1)">Next</a>
+                            <a href="~/Usuario/ConsultaUsuario?page=@(Model.Pager.CurrentPage + 1)">Next</a>
                         </li>
                             <li>
-                                <a href="~/Home/Index?page=@(Model.Pager.TotalPages)">Last</a>
+                                <a href="~/Usuario/ConsultaUsuario?page=@(Model.Pager.TotalPages)">Last</a>
                             </li>
                     }
-                </ul>
+                </ul> 
             }		
         </div>
 
@@ -135,7 +132,8 @@
     </div><!-- /.box -->
 </div>
 
-<div class="modal fade bootstrapmodal">
+<!--MODAL.ASIGNAR PERFIL-->
+<div id="myModalAsignarPerfil" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -144,35 +142,45 @@
             </div>
             <div class="modal-body">
                 <div class="container">
-                    <div class="row">
+                    <table id="asignadoTable" class="table table-bordered table-hover">
+                        <thead>
+                            <tr class="bg-blue text small">
+                                <th style="width: 10px">#</th>
+                                <th>Perfil</th>
+                                <th style="width: 40px">Acci&oacute;n</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="4" class="text small text-info">No se encontraron perfiles asignados</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                        <div class="list-group col-md-3" id="ListaNoAsignados">
-                            <a class="list-group-item list-group-item-info"> Lista Sin asignar:</a>
-                            <a href="" class="list-group-item">Item</a>
-                            <a href="" class="list-group-item">Item 2</a>
-                            <a href="" class="list-group-item">Item 3</a>
-                            <a href="" class="list-group-item">Item 4</a>
-                        </div>
-
-                        <div class="list-group col-md-3" id="ListaAsignados">
-                            <a class="list-group-item list-group-item-info"> Lista asignados:</a>
-                            <a href="" class="list-group-item">Item</a>
-                            <a href="" class="list-group-item">Item 2</a>
-                        </div>
-
-                    </div>
-
-
+                    <table id="noAsignadoTable" class="table table-bordered table-hover">
+                        <thead>
+                            <tr class="bg-blue text small">
+                                <th style="width: 10px">#</th>
+                                <th>Perfil</th>
+                                <th style="width: 40px">Acci&oacute;n</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="4" class="text small text-info">No se encontraron perfiles sin asignar</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
             <div class="modal-footer">
-                <button class="btn btn-primary">Grabar cambios</button>
-                <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnAsignarPerfil" class="btn btn-primary" data-dismiss="modal">Grabar cambios</button>
             </div>
         </div>
     </div>
 </div>
+
 
 <!--MODAL.AGREGAR-USUARIO-->
 <div id="myModalAddUsuario" class="modal fade">
@@ -185,7 +193,31 @@
             <div class="modal-body">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-user-plus"></i></span>
-                    <input id="txtNombreUsuario" type="text" class="form-control" placeholder="Agregar Nuevo Usuario" />
+                    <input id="txtNombreUsuario" type="text" class="form-control" placeholder="Agregar Nuevo Usuario"/>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-edit"></i></span>
+                    <input id="txtApePaterno" type="text" class="form-control" placeholder="Apellido Paterno" />
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-edit"></i></span>
+                    <input id="txtApeMaterno" type="text" class="form-control" placeholder="Apellido Materno" />
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-edit"></i></span>
+                    <input id="txtNombres" type="text" class="form-control" placeholder="Nombres" />
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-edit"></i></span>
+                    <input id="txtCorreo" type="text" class="form-control" placeholder="Correo" />
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-edit"></i></span>
+                    <input id="txtArea" type="text" class="form-control" placeholder="Area" />
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-edit"></i></span>
+                    <input id="txtRol" type="text" class="form-control" placeholder="Rol" />
                 </div>
             </div>
             <div class="modal-footer">
@@ -205,10 +237,34 @@
                 <h5 class="modal-title"><i class="fa fa-user" aria-hidden="true"></i> Editar Usuario</h5>
             </div>
             <div class="modal-body">
-                <div id="idpropie" hidden></div>
+                <div id="idusuario" hidden></div>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-edit"></i></span>
-                    <input id="txtEditUsuario" type="text" class="form-control" placeholder="Editar Usuario" />
+                    <input id="txtEditUsuario" type="text" class="form-control" placeholder="Usuario"/>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-edit"></i></span>
+                    <input id="txtEditApePaterno" type="text" class="form-control" placeholder="Apellido Paterno"/>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-edit"></i></span>
+                    <input id="txtEditApeMaterno" type="text" class="form-control" placeholder="Apellido Materno"/>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-edit"></i></span>
+                    <input id="txtEditNombres" type="text" class="form-control" placeholder="Nombres"/>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-edit"></i></span>
+                    <input id="txtEditCorreo" type="text" class="form-control" placeholder="Correo" />
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-edit"></i></span>
+                    <input id="txtEditArea" type="text" class="form-control" placeholder="Area"/>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-edit"></i></span>
+                    <input id="txtEditRol" type="text" class="form-control" placeholder="Rol" />
                 </div>
             </div>
             <div class="modal-footer">
@@ -243,12 +299,7 @@
 
 <script type="text/javascript">
 
-    $(function () {
-        //fnMostrarUsuarios();
-    });
-
-
-    function fnMostrarUsuarios() {
+    @*function fnMostrarUsuarios() {
         var url = '@Url.Action("GetAllUsuarios", "Usuario")';
 
         var defaultData;
@@ -283,11 +334,48 @@
                     });
 
             });
+    };*@
+
+    function fnMostrarPerfilesAsignados(id) {
+
+        var url = '@Url.Action("GetPerfilesAsignadosUsuarios", "Usuario",new RouteValueDictionary (new { id="id"}))'.replace("id", id);
+        var size;
+
+        $.getJSON(url,
+            function (data) {
+                $.ajaxSetup({ cache: false });
+                $('#asignadoTable').find('tbody').children().remove();
+                size = Object.keys(data).length;
+
+                if (size > 0) {
+                    $.each(data,
+                        function (i, item) {
+                            $('#asignadoTable')
+                                .find('tbody')
+                                .append('<tr class="text small"><td>' +
+                                    item.id +
+                                    '</td><td>' +
+                                    item.descripcion +
+                                    '</td><td><a href="/Carpeta/Download?code=' +
+                                    item.id +
+                                    '" class="btn btn-xs bg-blue-gradient"><i class="fa fa-download" aria-hidden="true"></i> No asignar</a></td></tr>');
+                        });
+                } else {
+                    $('#asignadoTable')
+                        .find('tbody')
+                        .append('<tr><td colspan="4" class="text small text-info">No se encontraron perfiles asignados</td></tr>');
+                }
+
+
+            });
+
+
     };
 
+
     function jsEdicionelement(codUsuario, codArea, codRol) {
-        //alert(id+descripcion);
-        $('#idpropie').text(id);
+        //alert(codUsuario + codArea);
+        $('#idusuario').text(codUsuario);
         $('#txtEditUsuario').val(codUsuario);
         $('#myModalEditUsuario').modal('show');
         $('#myModalEditUsuario').on('shown.bs.modal', function () {
@@ -300,6 +388,32 @@
         $('#tdelmsg').text(descripcion);
         $('#myModalDeleteUsuario').modal('show');
     };
+
+    function jsAsignarelement(id) {
+        fnMostrarPerfilesAsignados(id);
+        $('#myModalAsignarPerfil').modal('show');
+    };
+
+    $("#btnUpdateUsuario").click(function () {
+
+        var codigo = $('#idusuario').text();
+        var glsUsuario = document.getElementById("txtEditUsuario").value;
+        var url = '@Url.Action("Actualizar", "Usuario")';
+
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            url: url,
+            data: '{"code":"' + codigo + '","descripcion":"' + glsUsuario + '"}',
+            datatype: 'json',
+            success: function (result) {
+                //si registro correctamente recargamos la grilla
+            },
+            error: function (xhr) {
+                alert('Error: ' + xhr.statusText);
+            }
+        });
+    });
 
 </script>
 

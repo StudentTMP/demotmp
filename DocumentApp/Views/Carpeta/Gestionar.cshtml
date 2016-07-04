@@ -478,20 +478,33 @@
         //var defaultData;
         var size;
 
-        $.getJSON(url, function (data) {
-            $.ajaxSetup({ cache: false });
-            $('#mitabla').find('tbody').children().remove();
-            size = Object.keys(data).length;
+        $.getJSON(url,
+            function(data) {
+                $.ajaxSetup({ cache: false });
+                $('#mitabla').find('tbody').children().remove();
+                size = Object.keys(data).length;
 
-            if (size > 0) {
-                $.each(data, function (i, item) {
-                    $('#mitabla').find('tbody')
-                    .append('<tr class="text small"><td>' + item.nro + '</td><td>' + item.documento + '</td><td>' + item.tipoDocumento + '</td><td><a href="/Carpeta/Download?code=' + item.id + '" class="btn btn-xs bg-blue-gradient"><i class="fa fa-download" aria-hidden="true"></i> Descargar</a></td></tr>')
-                });
-            } else {
-                $('#mitabla').find('tbody').append('<tr><td colspan="4" class="text small text-info">No se encontraron documentos para la selecci&oacute;n actual</td></tr>')
-            }
-        })
+                if (size > 0) {
+                    $.each(data,
+                        function(i, item) {
+                            $('#mitabla')
+                                .find('tbody')
+                                .append('<tr class="text small"><td>' +
+                                    item.nro +
+                                    '</td><td>' +
+                                    item.documento +
+                                    '</td><td>' +
+                                    item.tipoDocumento +
+                                    '</td><td><a href="/Carpeta/Download?code=' +
+                                    item.id +
+                                    '" class="btn btn-xs bg-blue-gradient"><i class="fa fa-download" aria-hidden="true"></i> Descargar</a></td></tr>')
+                        });
+                } else {
+                    $('#mitabla')
+                        .find('tbody')
+                        .append('<tr><td colspan="4" class="text small text-info">No se encontraron documentos para la selecci&oacute;n actual</td></tr>')
+                }
+            });
     };
 
     function getAllTipoDocumentos() {

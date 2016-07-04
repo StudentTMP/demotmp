@@ -7,6 +7,15 @@ namespace DocumentApp.Models
 {
     public class UsuarioViewModel
     {
+
+        public IEnumerable<Usuario> Items { get; set; }
+        public Pager Pager { get; set; }
+
+
+    }
+
+    public class Usuario
+    {
         public int Nro { get; set; }
         public string CodigoUsuario { get; set; }
         public int CodigoArea { get; set; }
@@ -16,11 +25,6 @@ namespace DocumentApp.Models
         public int Estado { get; set; }
         public string UsuarioIngreso { get; set; }
         public string FechaIngreso { get; set; }
-        public IEnumerable<int> Items { get; set; }
-        public Pager Pager { get; set; }
-
-
     }
-
 
 } 
