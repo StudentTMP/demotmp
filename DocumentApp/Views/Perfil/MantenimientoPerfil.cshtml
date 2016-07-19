@@ -1,5 +1,5 @@
-﻿@model DocumentApp.Models.PerfilViewModel 
-    
+﻿@model DocumentApp.Models.PerfilViewModel
+
 @{
     ViewBag.Title = "MantenimientoPerfil";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -26,50 +26,47 @@
 
             <table id="profileTable" class="table table-bordered">
                 <thead>
-                <tr>
-                    <th style="width: 10px">#</th>
-                    <th>Descripción</th>
-                    <th>Estado</th>
-                    <th>Usuario Ingreso</th>
-                    <th>Fecha Ingreso</th>
-
-                    <th style="width: 40px">Acci&oacute;n</th>
-                </tr>
+                    <tr>
+                        <th style="width: 10px">#</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
+                        <th style="width: 40px">Acci&oacute;n</th>
+                    </tr>
                 </thead>
                 <tbody>
-                @if (Model.Items.Any())
-                {
-                    foreach (var item in Model.Items)
+                    @if (Model.Items.Any())
                     {
-                        <tr class="text small">
-                            <td style="width: 10px">
-                                @Html.DisplayFor(modelItem => item.Id)
-                            </td>
-                            <td style="width: 10px">
-                                @Html.DisplayFor(modelItem => item.Descripcion)
-                            </td>
-                            <td style="width: 10px">
-                                @Html.DisplayFor(modelItem => item.Estado)
-                            </td>
-                            <td style="width: 160px">
-                                <div id="divbotonesAccionGrid" class="text-center btn-group-xs">
-                                    <a class="btn btn-primary btn-flat" href="javascript:void(0);" onclick="jsEdicionelement('@item.Id', '@item.Descripcion');">
-                                        <span class="fa fa-edit fa-lg"></span>  Editar
-                                    </a>
-                                    <a class="btn btn-danger btn-flat" href="javascript:void(0);" onclick="jsDeletelement('@item.Id');">
-                                        <span class="fa fa-trash-o fa-lg"></span>  Eliminar
-                                    </a>
-                                </div>
-                            </td>
+                        foreach (var item in Model.Items)
+                        {
+                            <tr class="text small">
+                                <td style="width: 10px">
+                                    @Html.DisplayFor(modelItem => item.Id)
+                                </td>
+                                <td style="width: 10px">
+                                    @Html.DisplayFor(modelItem => item.Descripcion)
+                                </td>
+                                <td style="width: 10px">
+                                    @Html.DisplayFor(modelItem => item.Estado)
+                                </td>
+                                <td style="width: 160px">
+                                    <div id="divbotonesAccionGrid" class="text-center btn-group-xs">
+                                        <a class="btn btn-primary btn-flat" href="javascript:void(0);" onclick="jsEdicionelement('@item.Id', '@item.Descripcion');">
+                                            <span class="fa fa-edit fa-lg"></span>  Editar
+                                        </a>
+                                        <a class="btn btn-danger btn-flat" href="javascript:void(0);" onclick="jsDeletelement('@item.Id');">
+                                            <span class="fa fa-trash-o fa-lg"></span>  Eliminar
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" class="text small text-info">No se encontraron perfiles registrados&hellip;</td>
                         </tr>
                     }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="3" class="text small text-info">No se encontraron perfiles registrados&hellip;</td>
-                    </tr>
-                }
 
                 </tbody>
             </table>
@@ -111,6 +108,28 @@
 
 
     </div><!-- /.box -->
+</div>
+
+<!--MODAL.AGREGAR-PERFIL-->
+<div id="myModalAddPerfil" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-blue-gradient">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h5 class="modal-title"><i class="fa fa-user" aria-hidden="true"></i> Registro de Perfil</h5>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-user-plus"></i></span>
+                    <input id="txtNombrePerfil" type="text" class="form-control" placeholder="Agregar Nuevo Perfil" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btnSavePerfil" class="btn btn-primary" data-dismiss="modal">Registrar</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!--MODAL.EDITAR-PERFIL-->
@@ -160,6 +179,39 @@
 <script type="text/javascript">
 
     var idPerfil = 0;
+
+    $("#btnRegistroPerfil").click(function () {
+        $("#txtNombrePerfil").val("");
+        $('#myModalAddPerfil').modal('show');
+        $('#myModalAddPerfil').on('shown.bs.modal', function () {
+            $("#txtNombrePerfil").focus();
+        });
+    });
+
+    $('#myModalAddPerfil').on('hidden.bs.modal', function () {
+        //window.alert('hidden event fired!');
+        location.reload;
+    });
+
+    $("#btnSavePerfil").click(function () {
+
+        var descripcion = document.getElementById("txtNombrePerfil").value;
+        var url = '@Url.Action("Registrar", "Perfil")';
+
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            url: url,
+            data: '{"perfil":"' + descripcion + '"}',
+            datatype: 'json',
+            success: function (result) {
+                //si registro correctamente recargamos la grilla
+            },
+            error: function (xhr) {
+                alert('Error: ' + xhr.statusText);
+            }
+        });
+    });
 
     function jsEdicionelement(id, descripcion) {
         //alert(codUsuario + codArea);

@@ -10,7 +10,7 @@ namespace Document.BusinessLogic
 {
     public class BLPerfil
     {
-        public List<BEPerfil> ListarPropietario()
+        public List<BEPerfil> ListarPerfiles()
         {
             return new DAPerfil().ListarPerfil();
         }
