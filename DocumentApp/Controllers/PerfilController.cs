@@ -24,22 +24,19 @@ namespace DocumentApp.Controllers
             int iCorrelativo = 0;
             var pager = new Pager(olistaPerfiles.Count(), page);
 
-            foreach (BEPerfiles item in olistaUsuarios)
+            foreach (BEPerfiles item in olistaPerfiles)
             {
-                usuario = new Usuario();
+                perfil = new Perfil();
                 iCorrelativo += 1;
-                usuario.Nro = iCorrelativo;
-                usuario.CodigoUsuario = item.cod_usuario;
-                usuario.Area = item.gls_area;
-                usuario.Rol = item.gls_rol;
-                usuario.Estado = item.cod_estado_registro;
-                usuario.UsuarioIngreso = item.aud_usr_ingreso;
-                usuario.FechaIngreso = item.aud_fec_ingreso.ToString("dd-MM-yyyy");
-                listaUsuarios.Add(usuario);
+                perfil.Nro = iCorrelativo;
+                perfil.Id = item.cod_perfil;
+                perfil.Descripcion = item.gls_descripcion;
+                perfil.Estado = item.cod_estado_registro;
+                listaPerfiles.Add(perfil);
             }
 
-            usuarios.Items = listaUsuarios.Skip((pager.CurrentPage - 1) * pager.PageSize).Take(pager.PageSize);
-            usuarios.Pager = pager;
+            perfiles.Items = listaPerfiles.Skip((pager.CurrentPage - 1) * pager.PageSize).Take(pager.PageSize);
+            perfiles.Pager = pager;
              * */
             return View();
         }

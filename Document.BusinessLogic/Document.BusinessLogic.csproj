@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="BLCarpeta.cs" />
     <Compile Include="BLDocumento.cs" />
+    <Compile Include="BLPerfil.cs" />
     <Compile Include="BLPropietario.cs" />
     <Compile Include="BLTipoDocumento.cs" />
     <Compile Include="BLUsuario.cs" />

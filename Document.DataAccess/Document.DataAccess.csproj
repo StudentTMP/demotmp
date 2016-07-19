@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="DACarpeta.cs" />
     <Compile Include="DADocumento.cs" />
+    <Compile Include="DAPerfil.cs" />
     <Compile Include="DAPropietario.cs" />
     <Compile Include="DATipoDocumento.cs" />
     <Compile Include="DAUsuario.cs" />
