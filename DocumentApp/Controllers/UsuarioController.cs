@@ -77,10 +77,10 @@ namespace DocumentApp.Controllers
 
         public ActionResult Actualizar(string code, string descripcion)
         {
-            //UsuarioLoginViewModel UsuarioActual;
-            //UsuarioActual = (UsuarioLoginViewModel)Session["objUsuario"];
+            UsuarioLoginViewModel UsuarioActual;
+            UsuarioActual = (UsuarioLoginViewModel)Session["objUsuario"];
 
-            //BEPropietario propietario = new BEPropietario();
+            //BEUsuario usuario = new BEUsuario();
             //propietario.cod_propietario = Convert.ToInt16(code);
             //propietario.gls_propietario = descripcion;
             //propietario.aud_usr_modificacion = UsuarioActual.Codigo;

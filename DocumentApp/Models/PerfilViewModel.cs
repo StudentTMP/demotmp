@@ -7,9 +7,16 @@ namespace DocumentApp.Models
 {
     public class PerfilViewModel
     {
-        public int id { get; set; }
-        public string descripcion { get; set; }
-        public int estado { get; set; }
+    public IEnumerable<Perfil> Items { get; set; }
+    public Pager Pager { get; set; }
+    }
+
+    public class Perfil
+    {
+        public int Nro { get; set; }
+        public int Id { get; set; }
+        public string Descripcion { get; set; }
+        public int Estado { get; set; }
         public string UsuarioModificacion { get; set; }
         public DateTime FechaModificacion { get; set; }
         public string UsuarioIngreso { get; set; }

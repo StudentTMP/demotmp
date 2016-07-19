@@ -361,6 +361,7 @@
     <Content Include="Views\Errores\Inesperado.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\Usuario\ConsultaUsuario.cshtml" />
+    <Content Include="Views\Perfil\MantenimientoPerfil.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -412,6 +413,7 @@
     <Compile Include="Controllers\Extensiones.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\PerfilController.cs" />
     <Compile Include="Controllers\PropietarioController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Controllers\Util.cs" />
