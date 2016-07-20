@@ -28,8 +28,7 @@
                 <thead>
                     <tr>
                         <th style="width: 10px">#</th>
-                        <th>Descripción</th>
-                        <th>Estado</th>
+                        <th>Descripci&oacute;n</th>
                         <th style="width: 40px">Acci&oacute;n</th>
                     </tr>
                 </thead>
@@ -40,13 +39,10 @@
                         {
                             <tr class="text small">
                                 <td style="width: 10px">
-                                    @Html.DisplayFor(modelItem => item.Id)
+                                    @Html.DisplayFor(modelItem => item.Nro)
                                 </td>
                                 <td style="width: 10px">
                                     @Html.DisplayFor(modelItem => item.Descripcion)
-                                </td>
-                                <td style="width: 10px">
-                                    @Html.DisplayFor(modelItem => item.Estado)
                                 </td>
                                 <td style="width: 160px">
                                     <div id="divbotonesAccionGrid" class="text-center btn-group-xs">
@@ -178,7 +174,7 @@
 
 <script type="text/javascript">
 
-    var idPerfil = 0;
+    //var idPerfil = 0;
 
     $("#btnRegistroPerfil").click(function () {
         $("#txtNombrePerfil").val("");
@@ -188,10 +184,10 @@
         });
     });
 
-    $('#myModalAddPerfil').on('hidden.bs.modal', function () {
-        //window.alert('hidden event fired!');
-        location.reload;
-    });
+    //$('#myModalAddPerfil').on('hidden.bs.modal', function () {
+    //    //window.alert('hidden event fired!');
+    //    location.reload();
+    //});
 
     $("#btnSavePerfil").click(function () {
 
@@ -206,6 +202,7 @@
             datatype: 'json',
             success: function (result) {
                 //si registro correctamente recargamos la grilla
+                location.reload();
             },
             error: function (xhr) {
                 alert('Error: ' + xhr.statusText);
@@ -214,7 +211,7 @@
     });
 
     function jsEdicionelement(id, descripcion) {
-        //alert(codUsuario + codArea);
+        //alert(id + descripcion);
         $('#idperfil').text(id);
         $('#txtEditPerfil').val(descripcion);
 
@@ -225,8 +222,8 @@
     };
 
     function jsDeletelement(id) {
-        idPerfil = id;
-        //$('#tdelmsg').text(descripcion);
+        //alert(id);
+        $('#idperfil').text(id);
         $('#myModalDeletePerfil').modal('show');
     };
 
@@ -245,6 +242,7 @@
             datatype: 'json',
             success: function (result) {
                 //si registro correctamente recargamos la grilla
+                location.reload();
             },
             error: function (xhr) {
                 alert('Error: ' + xhr.statusText);
@@ -253,17 +251,19 @@
     });
 
     $("#btnDeletePropOK").click(function () {
-
+        var id = $('#idperfil').text();
+        //alert(id);
         var url = '@Url.Action("Eliminar", "Perfil")';
 
         $.ajax({
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
             url: url,
-            data: '{"code":"' + idPerfil + '"}',
+            data: '{"id":"' + id + '"}',
             datatype: 'json',
             success: function (result) {
                 //si registro correctamente recargamos la grilla
+                location.reload();
             },
             error: function (xhr) {
                 alert('Error: ' + xhr.statusText);

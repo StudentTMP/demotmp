@@ -20,5 +20,5 @@ namespace Document.BusinessEntity
         public string ape_materno { get; set; }
         public string nombres { get; set; }
         public string correo { get; set; }
-    }
+     }
 }

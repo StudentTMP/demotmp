@@ -31,9 +31,9 @@
                 <tr>
                     <th style="width: 10px">#</th>
                     <th>Usuario</th>
+                    <th>Nombres Completos</th>
                     <th>Area</th>
                     <th>Rol</th>
-                    <th>Estado</th>
                     <th>Usuario Ingreso</th>
                     <th>Fecha Ingreso</th>
 
@@ -53,13 +53,13 @@
                                 @Html.DisplayFor(modelItem => item.CodigoUsuario)
                             </td>
                             <td style="width: 10px">
+                                @Html.DisplayFor(modelItem => item.NombreCompleto)
+                            </td>
+                            <td style="width: 10px">
                                 @Html.DisplayFor(modelItem => item.Area)
                             </td>
                             <td style="width: 10px">
                                 @Html.DisplayFor(modelItem => item.Rol)
-                            </td>
-                            <td style="width: 10px">
-                                @Html.DisplayFor(modelItem => item.Estado)
                             </td>
                             <td style="width: 10px">
                                 @Html.DisplayFor(modelItem => item.UsuarioIngreso)
@@ -72,7 +72,7 @@
                                     <a class="btn btn-success" href="javascript:void(0);" onclick="jsAsignarelement('@item.CodigoUsuario');">
                                         <span class="glyphicon glyphicon-eye-open"></span>  Asignar Perfil
                                     </a>                                    
-                                    <a class="btn btn-primary btn-flat" href="javascript:void(0);" onclick="jsEdicionelement('@item.CodigoUsuario', '@item.CodigoArea', '@item.CodigoRol', '@item.Area');">
+                                    <a class="btn btn-primary btn-flat" href="javascript:void(0);" onclick="jsEdicionelement('@item.CodigoUsuario', '@item.CodigoArea', '@item.CodigoRol', '@item.ApellidoMaterno', '@item.ApellidoPaterno', '@item.Nombres', '@item.Correo');">
                                         <span class="fa fa-edit fa-lg"></span>  Editar
                                     </a>
                                     <a class="btn btn-danger btn-flat" href="javascript:void(0);" onclick="jsDeletelement('@item.CodigoUsuario');">
@@ -240,7 +240,7 @@
                 <div id="idusuario" hidden></div>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-edit"></i></span>
-                    <input id="txtEditUsuario" type="text" class="form-control" placeholder="Usuario"/>
+                    <input id="txtEditUsuario" type="text" class="form-control; disabled" placeholder="Usuario"/>
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-edit"></i></span>
@@ -258,13 +258,13 @@
                     <span class="input-group-addon"><i class="fa fa-edit"></i></span>
                     <input id="txtEditCorreo" type="text" class="form-control" placeholder="Correo" />
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-edit"></i></span>
-                    <input id="txtEditArea" type="text" class="form-control" placeholder="Area"/>
+                <div class="form-group input-group">
+                    <span class="input-group-addon"><i class="fa fa-tags"></i></span>
+                    <select id="selupdarea" name="codarea" class="form-control select2" data-placeholder="Seleccione el area..."></select>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-edit"></i></span>
-                    <input id="txtEditRol" type="text" class="form-control" placeholder="Rol" />
+                <div class="form-group input-group">
+                    <span class="input-group-addon"><i class="fa fa-tags"></i></span>
+                    <select id="selupdrol" name="codrol" class="form-control select2" data-placeholder="Seleccione el rol..."></select>
                 </div>
             </div>
             <div class="modal-footer">
@@ -338,18 +338,19 @@
 
     function fnMostrarPerfilesAsignados(id) {
 
-        var url = '@Url.Action("GetPerfilesAsignadosUsuarios", "Usuario",new RouteValueDictionary (new { id="id"}))'.replace("id", id);
+        var url = '@Url.Action("GetPerfilesAsignadosUsuarios", "Usuario",new RouteValueDictionary (new { id="id"}))'
+            .replace("id", id);
         var size;
 
         $.getJSON(url,
-            function (data) {
+            function(data) {
                 $.ajaxSetup({ cache: false });
                 $('#asignadoTable').find('tbody').children().remove();
                 size = Object.keys(data).length;
 
                 if (size > 0) {
                     $.each(data,
-                        function (i, item) {
+                        function(i, item) {
                             $('#asignadoTable')
                                 .find('tbody')
                                 .append('<tr class="text small"><td>' +
@@ -372,16 +373,26 @@
 
     };
 
-
-    function jsEdicionelement(codUsuario, codArea, codRol) {
+    function jsEdicionelement(codigoUsuario, codigoArea, codigoRol, apellidoMaterno, apellidoPaterno, nombres, correo) {
         //alert(codUsuario + codArea);
-        $('#idusuario').text(codUsuario);
-        $('#txtEditUsuario').val(codUsuario);
-
+        $('#idusuario').text(codigoUsuario);
+        $('#txtEditUsuario').val(codigoUsuario);
+        $('#txtEditApeMaterno').val(apellidoMaterno);
+        $('#txtEditApePaterno').val(apellidoPaterno);
+        $('#txtEditNombres').val(nombres);
+        $('#txtEditCorreo').val(correo);
         $('#myModalEditUsuario').modal('show');
-        $('#myModalEditUsuario').on('shown.bs.modal', function () {
-            $("#txtEditUsuario").focus();
-        });
+        $('#myModalEditUsuario')
+            .on('shown.bs.modal',
+                function() {
+                    $("#txtEditApeMaterno").focus();
+                });
+        getAllAreas();
+        getAllRoles();
+        alert($('#selupdarea option[value=result[' + codigoArea + ']').text());
+        $('#selupdarea option[value=result['+codigoArea+']').attr("selected", "selected");
+        $('#selupdrol option[value=result['+codigoRol+']').attr("selected", "selected");
+
     };
 
     function jsDeletelement(id) {
@@ -395,27 +406,83 @@
         $('#myModalAsignarPerfil').modal('show');
     };
 
-    $("#btnUpdateUsuario").click(function () {
+    $("#btnUpdateUsuario")
+        .click(function() {
 
-        var codigo = $('#idusuario').text();
-        var glsUsuario = document.getElementById("txtEditUsuario").value;
-        var url = '@Url.Action("Actualizar", "Usuario")';
+            var codigo = $('#idusuario').text();
+            var glsUsuario = document.getElementById("txtEditUsuario").value;
+            var url = '@Url.Action("Actualizar", "Usuario")';
 
-        $.ajax({
-            type: 'POST',
-            contentType: 'application/json; charset=utf-8',
-            url: url,
-            data: '{"code":"' + codigo + '","descripcion":"' + glsUsuario + '"}',
-            datatype: 'json',
-            success: function (result) {
-                //si registro correctamente recargamos la grilla
-            },
-            error: function (xhr) {
-                alert('Error: ' + xhr.statusText);
-            }
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                url: url,
+                data: '{"code":"' + codigo + '","descripcion":"' + glsUsuario + '"}',
+                datatype: 'json',
+                success: function(result) {
+                    //si registro correctamente recargamos la grilla
+                },
+                error: function(xhr) {
+                    alert('Error: ' + xhr.statusText);
+                }
+            });
         });
-    });
 
+    function getAllAreas() {
+        var url = '@Url.Action("GetAllAreas", "Usuario")';
+        var size;
+
+        $('#selupdarea').empty();
+
+        $.getJSON(url,
+            function(data) {
+                size = Object.keys(data).length;
+                if (size > 0) {
+                    $.each(data,
+                        function(i, item) {
+                            $('#selupdarea')
+                                .append($("<option></option>")
+                                    .attr("value", item.codigo)
+                                    .text(item.descripcion));
+                        });
+                } else {
+                    $('#selupdarea').removeClass('form-control select2');
+                    $('#selupdarea').addClass('form-control select2 text-red');
+                    $('#selupdarea')
+                        .append($("<option></option>")
+                            .attr("value", 0)
+                            .text("No se han registrado las areas"));
+                }
+            });
+    };
+
+    function getAllRoles() {
+        var url = '@Url.Action("GetAllRoles", "Usuario")';
+            var size;
+
+            $('#selupdrol').empty();
+
+            $.getJSON(url,
+                function(data) {
+                    size = Object.keys(data).length;
+                    if (size > 0) {
+                        $.each(data,
+                            function(i, item) {
+                                $('#selupdrol')
+                                    .append($("<option></option>")
+                                        .attr("value", item.codigo)
+                                        .text(item.descripcion));
+                            });
+                    } else {
+                        $('#selupdrol').removeClass('form-control select2');
+                        $('#selupdrol').addClass('form-control select2 text-red');
+                        $('#selupdrol')
+                            .append($("<option></option>")
+                                .attr("value", 0)
+                                .text("No se han registrado las areas"));
+                    }
+                });
+    };
 </script>
 
 

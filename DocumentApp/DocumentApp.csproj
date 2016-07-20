@@ -420,6 +420,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AreaViewModel.cs" />
     <Compile Include="Models\CarpetaViewModel.cs" />
     <Compile Include="Models\DocumentoViewModel.cs" />
     <Compile Include="Models\ErrorViewModel.cs" />
@@ -428,6 +429,7 @@
     <Compile Include="Models\Pager.cs" />
     <Compile Include="Models\PerfilViewModel.cs" />
     <Compile Include="Models\PropietarioViewModel.cs" />
+    <Compile Include="Models\RolViewModel.cs" />
     <Compile Include="Models\TipoDocumentoViewModel.cs" />
     <Compile Include="Models\UsuarioLoginViewModel.cs" />
     <Compile Include="Models\UsuarioViewModel.cs" />

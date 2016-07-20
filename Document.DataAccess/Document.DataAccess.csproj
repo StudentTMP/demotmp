@@ -50,6 +50,8 @@
     <Compile Include="DADocumento.cs" />
     <Compile Include="DAPerfil.cs" />
     <Compile Include="DAPropietario.cs" />
+    <Compile Include="DARol.cs" />
+    <Compile Include="DAArea.cs" />
     <Compile Include="DATipoDocumento.cs" />
     <Compile Include="DAUsuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

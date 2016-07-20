@@ -12,6 +12,6 @@ namespace Document.BusinessEntity
     public class BERol : Auditoria
     {
         public int cod_rol { get; set; }
-        public int gls_rol { get; set; }
+        public string gls_rol { get; set; }
     }
 }

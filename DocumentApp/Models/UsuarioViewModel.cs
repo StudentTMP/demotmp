@@ -25,6 +25,12 @@ namespace DocumentApp.Models
         public int Estado { get; set; }
         public string UsuarioIngreso { get; set; }
         public string FechaIngreso { get; set; }
+        public string ApellidoPaterno { get; set; }
+        public string ApellidoMaterno { get; set; }
+        public string Nombres { get; set; }
+        public string Correo { get; set; }
+
+        public string NombreCompleto { get { return string.Format("{0} {1}, {2}", ApellidoPaterno, ApellidoMaterno, Nombres); } }
     }
 
 } 

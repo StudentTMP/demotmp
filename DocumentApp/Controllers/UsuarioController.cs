@@ -33,6 +33,11 @@ namespace DocumentApp.Controllers
                 iCorrelativo += 1;
                 usuario.Nro = iCorrelativo;
                 usuario.CodigoUsuario = item.cod_usuario;
+                usuario.ApellidoMaterno = item.ape_materno;
+                usuario.ApellidoPaterno = item.ape_paterno;
+                usuario.Nombres = item.nombres;
+                usuario.CodigoArea = item.cod_area;
+                usuario.CodigoRol = item.cod_rol;
                 usuario.Area = item.gls_area;
                 usuario.Rol = item.gls_rol;
                 usuario.Estado = item.cod_estado_registro;
@@ -127,5 +132,46 @@ namespace DocumentApp.Controllers
             return Json(Lista, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetAllAreas()
+        {
+            List<AreaViewModel> Lista = new List<AreaViewModel>();
+            AreaViewModel area;
+
+            List<BEArea> oListaArea;
+            BLArea oBLArea = new BLArea();
+            oListaArea = oBLArea.ListarArea();
+
+            foreach (BEArea item in oListaArea)
+            {
+                area = new AreaViewModel();
+                area.codigo = item.cod_area;
+                area.descripcion = item.gls_area;
+                area.estado = item.cod_estado_registro;
+                Lista.Add(area);
+            }
+
+            return Json(Lista, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetAllRoles()
+        {
+            List<RolViewModel> Lista = new List<RolViewModel>();
+            RolViewModel rol;
+
+            List<BERol> oListaRol;
+            BLRol oBlRol = new BLRol();
+            oListaRol = oBlRol.ListarRol();
+
+            foreach (BERol item in oListaRol)
+            {
+                rol = new RolViewModel();
+                rol.codigo = item.cod_rol;
+                rol.descripcion = item.gls_rol;
+                rol.estado = item.cod_estado_registro;
+                Lista.Add(rol);
+            }
+
+            return Json(Lista, JsonRequestBehavior.AllowGet);
+        }
     }
 }

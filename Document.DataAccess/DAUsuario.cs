@@ -100,8 +100,26 @@ namespace Document.DataAccess
                             if (!Convert.IsDBNull(odr["cod_usuario"]))
                                 oItem.cod_usuario = Convert.ToString(odr["cod_usuario"]);
 
+                            if (!Convert.IsDBNull(odr["ape_paterno"]))
+                                oItem.ape_paterno = Convert.ToString(odr["ape_paterno"]);
+
+                            if (!Convert.IsDBNull(odr["ape_materno"]))
+                                oItem.ape_materno = Convert.ToString(odr["ape_materno"]);
+
+                            if (!Convert.IsDBNull(odr["nombres"]))
+                                oItem.nombres = Convert.ToString(odr["nombres"]);
+
+                            if (!Convert.IsDBNull(odr["correo"]))
+                                oItem.correo = Convert.ToString(odr["correo"]);
+
+                            if (!Convert.IsDBNull(odr["cod_area"]))
+                                oItem.cod_area = Convert.ToInt32(odr["cod_area"]);
+
                             if (!Convert.IsDBNull(odr["gls_area"]))
                                 oItem.gls_area = Convert.ToString(odr["gls_area"]);
+
+                            if (!Convert.IsDBNull(odr["cod_rol"]))
+                                oItem.cod_rol = Convert.ToInt32(odr["cod_rol"]);
 
                             if (!Convert.IsDBNull(odr["gls_rol"]))
                                 oItem.gls_rol = Convert.ToString(odr["gls_rol"]);
