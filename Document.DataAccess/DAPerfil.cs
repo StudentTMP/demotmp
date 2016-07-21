@@ -155,5 +155,81 @@ namespace Document.DataAccess
             return iResultado;
         }
 
+        public List<BEPerfil> GetPerfilesSinAsignar(string id)
+        {
+            List<BEPerfil> oListado = new List<BEPerfil>();
+            BEPerfil oItem;
+
+            using (NpgsqlConnection ocn = new NpgsqlConnection(Util.getConnection()))
+            {
+                ocn.Open();
+                NpgsqlTransaction tran = ocn.BeginTransaction();
+                using (NpgsqlCommand ocmd = new NpgsqlCommand("public.func_listar_perfiles_sin_asignar", ocn))
+                {
+                    ocmd.CommandType = CommandType.StoredProcedure;
+                    ocmd.Parameters.Add("@p_cod_usuario", NpgsqlDbType.Varchar).Value = id;
+
+                    using (NpgsqlDataReader odr = ocmd.ExecuteReader())
+                    {
+                        while (odr.Read())
+                        {
+                            oItem = new BEPerfil();
+
+                            if (!Convert.IsDBNull(odr["cod_perfil"]))
+                                oItem.cod_perfil = Convert.ToInt32(odr["cod_perfil"]);
+
+                            if (!Convert.IsDBNull(odr["gls_perfil"]))
+                                oItem.gls_perfil = odr["gls_perfil"].ToString();
+
+                            oListado.Add(oItem);
+                        }
+                        odr.Close();
+                    }
+                }
+                tran.Commit();
+                ocn.Close();
+            }
+
+            return oListado;
+        }
+
+        public List<BEPerfil> GetPerfilesAsignados(string id)
+        {
+            List<BEPerfil> oListado = new List<BEPerfil>();
+            BEPerfil oItem;
+
+            using (NpgsqlConnection ocn = new NpgsqlConnection(Util.getConnection()))
+            {
+                ocn.Open();
+                NpgsqlTransaction tran = ocn.BeginTransaction();
+                using (NpgsqlCommand ocmd = new NpgsqlCommand("public.func_listar_perfiles_asignados", ocn))
+                {
+                    ocmd.CommandType = CommandType.StoredProcedure;
+                    ocmd.Parameters.Add("@p_cod_usuario", NpgsqlDbType.Varchar).Value = id;
+
+                    using (NpgsqlDataReader odr = ocmd.ExecuteReader())
+                    {
+                        while (odr.Read())
+                        {
+                            oItem = new BEPerfil();
+
+                            if (!Convert.IsDBNull(odr["cod_perfil"]))
+                                oItem.cod_perfil = Convert.ToInt32(odr["cod_perfil"]);
+
+                            if (!Convert.IsDBNull(odr["gls_perfil"]))
+                                oItem.gls_perfil = odr["gls_perfil"].ToString();
+
+                            oListado.Add(oItem);
+                        }
+                        odr.Close();
+                    }
+                }
+                tran.Commit();
+                ocn.Close();
+            }
+
+            return oListado;
+        }
+
     }
 }

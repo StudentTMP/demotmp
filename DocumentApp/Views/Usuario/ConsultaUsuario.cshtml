@@ -32,6 +32,7 @@
                     <th style="width: 10px">#</th>
                     <th>Usuario</th>
                     <th>Nombres Completos</th>
+                    <th>Correo</th>
                     <th>Area</th>
                     <th>Rol</th>
                     <th>Usuario Ingreso</th>
@@ -54,6 +55,9 @@
                             </td>
                             <td style="width: 10px">
                                 @Html.DisplayFor(modelItem => item.NombreCompleto)
+                            </td>
+                            <td style="width: 10px">
+                                @Html.DisplayFor(modelItem => item.Correo)
                             </td>
                             <td style="width: 10px">
                                 @Html.DisplayFor(modelItem => item.Area)
@@ -142,36 +146,31 @@
             </div>
             <div class="modal-body">
                 <div class="container">
-                    <table id="asignadoTable" class="table table-bordered table-hover">
-                        <thead>
-                            <tr class="bg-blue text small">
-                                <th style="width: 10px">#</th>
-                                <th>Perfil</th>
-                                <th style="width: 40px">Acci&oacute;n</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td colspan="4" class="text small text-info">No se encontraron perfiles asignados</td>
-                            </tr>
-                        </tbody>
-                    </table>
 
-                    <table id="noAsignadoTable" class="table table-bordered table-hover">
-                        <thead>
-                            <tr class="bg-blue text small">
-                                <th style="width: 10px">#</th>
-                                <th>Perfil</th>
-                                <th style="width: 40px">Acci&oacute;n</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td colspan="4" class="text small text-info">No se encontraron perfiles sin asignar</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    <div class="form-group input-group col-xs-3">
+                        <span class="input-group-addon"><i class="fa fa-tags"></i></span>
+                        <select id="selperfil" name="codperfil" class="form-control select2 col-md-4" data-placeholder="Seleccione el perfil..."></select>
+                        <button type="button" id="btnAddPerfil" class="btn btn-primary col-md-4">Agregar</button>
+                    </div>
+                    <div>
+                        
+                    </div>
+
+                        <table id="AsignadoTable" class="table-bordered table-hover table-condensed col-md-5">
+                            <thead>
+                                <tr class="bg-blue text small">
+                                    <th class="col-md-1">#</th>
+                                    <th class="col-md-2">Perfil</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="2" class="text small text-info">No se encontraron perfiles asignados</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
@@ -211,13 +210,13 @@
                     <span class="input-group-addon"><i class="fa fa-edit"></i></span>
                     <input id="txtCorreo" type="text" class="form-control" placeholder="Correo" />
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-edit"></i></span>
-                    <input id="txtArea" type="text" class="form-control" placeholder="Area" />
+                <div class="form-group input-group">
+                    <span class="input-group-addon"><i class="fa fa-tags"></i></span>
+                    <select id="selarea" name="codarea" class="form-control select2" data-placeholder="Seleccione el area..."></select>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-edit"></i></span>
-                    <input id="txtRol" type="text" class="form-control" placeholder="Rol" />
+                <div class="form-group input-group">
+                    <span class="input-group-addon"><i class="fa fa-tags"></i></span>
+                    <select id="selrol" name="codrol" class="form-control select2" data-placeholder="Seleccione el rol..."></select>
                 </div>
             </div>
             <div class="modal-footer">
@@ -336,6 +335,23 @@
             });
     };*@
 
+    getAllAreas('selupdarea');
+    getAllRoles('selupdrol');
+    getAllAreas('selarea');
+    getAllRoles('selrol');
+
+    $("#btnRegistroUsuario").click(function () {
+        $("#txtNombreUsuario").val("");
+        $("#txtApePaterno").val("");
+        $("#txtApeMaterno").val("");
+        $("#txtNombres").val("");
+        $("#txtCorreo").val("");
+        $('#myModalAddUsuario').modal('show');
+        $('#myModalAddUsuario').on('shown.bs.modal', function () {
+            $("#txtNombreUsuario").focus();
+        });
+    });
+
     function fnMostrarPerfilesAsignados(id) {
 
         var url = '@Url.Action("GetPerfilesAsignadosUsuarios", "Usuario",new RouteValueDictionary (new { id="id"}))'
@@ -353,21 +369,52 @@
                         function(i, item) {
                             $('#asignadoTable')
                                 .find('tbody')
-                                .append('<tr class="text small"><td>' +
-                                    item.id +
-                                    '</td><td>' +
-                                    item.descripcion +
-                                    '</td><td><a href="/Carpeta/Download?code=' +
-                                    item.id +
-                                    '" class="btn btn-xs bg-blue-gradient"><i class="fa fa-download" aria-hidden="true"></i> No asignar</a></td></tr>');
+                                .append('<tr><td class="text small col-md-1">' +
+                                    item.Id +
+                                    '</td><td class="text small col-md-2">' +
+                                    item.Descripcion +
+                                    '</td></tr>');
                         });
                 } else {
                     $('#asignadoTable')
                         .find('tbody')
-                        .append('<tr><td colspan="4" class="text small text-info">No se encontraron perfiles asignados</td></tr>');
+                        .append('<tr><td colspan="2" class="text small text-info">No se encontraron perfiles asignados</td></tr>');
                 }
 
 
+            });
+
+
+    };
+
+    function fnListaPerfilesSinAsignar(id) {
+        //alert(id);
+        var url = '@Url.Action("GetPerfilesSinAsignar", "Usuario",new RouteValueDictionary (new { id="id"}))'
+            .replace("id", id);
+        var size;
+
+        $('#selperfil').empty();
+
+        $.getJSON(url,
+            function (data) {
+                size = Object.keys(data).length;
+                if (size > 0) {
+                    $.each(data,
+                        function (i, item) {
+                            //alert(item.descripcion);
+                            $('#selperfil')
+                                .append($("<option></option>")
+                                    .attr("value", item.Id)
+                                    .text(item.Descripcion));
+                        });
+                } else {
+                    $('#selperfil').removeClass('form-control select2');
+                    $('#selperfil').addClass('form-control select2 text-red');
+                    $('#selperfil')
+                        .append($("<option></option>")
+                            .attr("value", 0)
+                            .text("No existen perfiles disponibles"));
+                }
             });
 
 
@@ -384,55 +431,104 @@
         $('#myModalEditUsuario').modal('show');
         $('#myModalEditUsuario')
             .on('shown.bs.modal',
-                function() {
+                function () {
                     $("#txtEditApeMaterno").focus();
+                    //$('select[name^="selupdarea"] option[value=result[2]]').attr("selected", "selected");
+                    
                 });
-        getAllAreas();
-        getAllRoles();
-        alert($('#selupdarea option[value=result[' + codigoArea + ']').text());
-        $('#selupdarea option[value=result['+codigoArea+']').attr("selected", "selected");
-        $('#selupdrol option[value=result['+codigoRol+']').attr("selected", "selected");
+
+        //$('#selupdarea .selected').attr('id', codigoArea);
+
+        //$('#selupdarea option[value=result['+codigoArea+']').attr("selected", "selected");
+        //$('#selupdrol option[value=result['+codigoRol+']').attr("selected", "selected");
 
     };
 
     function jsDeletelement(id) {
         idUsuario = id;
-        $('#tdelmsg').text(descripcion);
+        $('#tdelmsg').text(id);
         $('#myModalDeleteUsuario').modal('show');
     };
 
     function jsAsignarelement(id) {
-        fnMostrarPerfilesAsignados(id);
+        //fnMostrarPerfilesAsignados(id);
+        fnListaPerfilesSinAsignar(id);
         $('#myModalAsignarPerfil').modal('show');
+        $('#myModalAsignarPerfil').on('shown.bs.modal', function () {
+            $(this).find('.modal-body').css({
+                'max-height':'100%'
+            });
+        });
     };
 
-    $("#btnUpdateUsuario")
-        .click(function() {
+    $("#btnSaveUsuario").click(function () {
+
+        var codigo = $('#idusuario').text();
+        var glsUsuario = document.getElementById("txtNombreUsuario").value;
+        var glsApellidoPaterno = document.getElementById("txtApePaterno").value;
+        var glsApellidoMaterno = document.getElementById("txtApeMaterno").value;
+        var glsNombres = document.getElementById("txtNombres").value;
+        var glsCorreo = document.getElementById("txtCorreo").value;
+        var codArea = $('#selarea').find("option:selected").value();
+        var codRol = $('#selrol').find("option:selected").value();
+        var url = '@Url.Action("Registrar", "Usuario")';
+
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            url: url,
+            data: '{"code":"' + codigo + '","glsUsuario":"' + glsUsuario + '","glsApellidoPaterno":"' + glsApellidoPaterno +
+                        '","glsApellidoMaterno":"' + glsApellidoMaterno + '","glsNombres":"' + glsNombres + '","glsCorreo":"' + glsCorreo +
+                        ',"codArea":"' + codArea + ',"codRol":"' + codRol + '"}',
+            datatype: 'json',
+            success: function (result) {
+                //si registro correctamente recargamos la grilla
+                location.reload();
+            },
+            error: function (xhr) {
+                alert('Error: ' + xhr.statusText);
+            }
+        });
+    });
+
+    $("#btnUpdateUsuario").click(function() {
 
             var codigo = $('#idusuario').text();
             var glsUsuario = document.getElementById("txtEditUsuario").value;
+            var glsApellidoPaterno = document.getElementById("txtEditApePaterno").value;
+            var glsApellidoMaterno = document.getElementById("txtEditApeMaterno").value;
+            var glsNombres = document.getElementById("txtEditNombres").value;
+            var glsCorreo = document.getElementById("txtEditCorreo").value;
+            var codArea = $('#selupdarea').find("option:selected").value();
+            var codRol = $('#selupdrol').find("option:selected").value();
             var url = '@Url.Action("Actualizar", "Usuario")';
 
             $.ajax({
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
                 url: url,
-                data: '{"code":"' + codigo + '","descripcion":"' + glsUsuario + '"}',
+                data: '{"code":"' + codigo + '","glsUsuario":"' + glsUsuario + '","glsApellidoPaterno":"' + glsApellidoPaterno +
+                        '","glsApellidoMaterno":"' + glsApellidoMaterno + '","glsNombres":"' + glsNombres + '","glsCorreo":"' + glsCorreo +
+                        ',"codArea":"' + codArea + ',"codRol":"' + codRol + '"}',
                 datatype: 'json',
                 success: function(result) {
                     //si registro correctamente recargamos la grilla
                 },
                 error: function(xhr) {
                     alert('Error: ' + xhr.statusText);
-                }
+                } 
             });
         });
 
-    function getAllAreas() {
+    $("#btnSaveUsuario").click(function () {
+
+
+    });
+    function getAllAreas(obj) {
         var url = '@Url.Action("GetAllAreas", "Usuario")';
         var size;
 
-        $('#selupdarea').empty();
+        $('#' + obj).empty();
 
         $.getJSON(url,
             function(data) {
@@ -440,15 +536,15 @@
                 if (size > 0) {
                     $.each(data,
                         function(i, item) {
-                            $('#selupdarea')
+                            $('#' + obj)
                                 .append($("<option></option>")
                                     .attr("value", item.codigo)
                                     .text(item.descripcion));
                         });
                 } else {
-                    $('#selupdarea').removeClass('form-control select2');
-                    $('#selupdarea').addClass('form-control select2 text-red');
-                    $('#selupdarea')
+                    $('#' + obj).removeClass('form-control select2');
+                    $('#' + obj).addClass('form-control select2 text-red');
+                    $('#' + obj)
                         .append($("<option></option>")
                             .attr("value", 0)
                             .text("No se han registrado las areas"));
@@ -456,11 +552,11 @@
             });
     };
 
-    function getAllRoles() {
+    function getAllRoles(obj) {
         var url = '@Url.Action("GetAllRoles", "Usuario")';
             var size;
 
-            $('#selupdrol').empty();
+            $('#'+obj).empty();
 
             $.getJSON(url,
                 function(data) {
@@ -468,15 +564,15 @@
                     if (size > 0) {
                         $.each(data,
                             function(i, item) {
-                                $('#selupdrol')
+                                $('#' + obj)
                                     .append($("<option></option>")
                                         .attr("value", item.codigo)
                                         .text(item.descripcion));
                             });
                     } else {
-                        $('#selupdrol').removeClass('form-control select2');
-                        $('#selupdrol').addClass('form-control select2 text-red');
-                        $('#selupdrol')
+                        $('#' + obj).removeClass('form-control select2');
+                        $('#' + obj).addClass('form-control select2 text-red');
+                        $('#' + obj)
                             .append($("<option></option>")
                                 .attr("value", 0)
                                 .text("No se han registrado las areas"));

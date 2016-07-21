@@ -148,7 +148,119 @@ namespace Document.DataAccess
             }
         }
 
+        public int Actualizar(BEUsuario usuario)
+        {
+            int idRegistro = 0;
+            try
+            {
+                using (NpgsqlConnection ocn = new NpgsqlConnection(Util.getConnection()))
+                {
+                    ocn.Open();
+                    NpgsqlTransaction tran = ocn.BeginTransaction();
+                    using (NpgsqlCommand ocmd = new NpgsqlCommand("public.func_actualizar_doc_usuario", ocn))
+                    {
+                        ocmd.CommandType = CommandType.StoredProcedure;
+                        ocmd.Parameters.Add("@p_cod_usuario", NpgsqlDbType.Varchar).Value = usuario.cod_usuario;
+                        ocmd.Parameters.Add("@p_ape_materno", NpgsqlDbType.Varchar).Value = usuario.ape_materno;
+                        ocmd.Parameters.Add("@p_ape_paterno", NpgsqlDbType.Varchar).Value = usuario.ape_paterno;
+                        ocmd.Parameters.Add("@p_nombres", NpgsqlDbType.Varchar).Value = usuario.nombres;
+                        ocmd.Parameters.Add("@p_correo", NpgsqlDbType.Varchar).Value = usuario.correo;
+                        ocmd.Parameters.Add("@p_cod_area", NpgsqlDbType.Integer).Value = usuario.cod_area;
+                        ocmd.Parameters.Add("@p_cod_rol", NpgsqlDbType.Integer).Value = usuario.cod_rol;
+                        ocmd.Parameters.Add("@p_aud_usr_modificacion", NpgsqlDbType.Varchar).Value = usuario.aud_usr_modificacion;
 
+                        using (NpgsqlDataReader odr = ocmd.ExecuteReader())
+                        {
+                            while (odr.Read())
+                                idRegistro = Convert.ToInt32(odr[0]);
+                        }
+
+                    }
+                    tran.Commit();
+                    ocn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+                //estadoIngreso = false;
+            }
+            return idRegistro;
+        }
+
+
+        /// <summary>
+        /// Eliminar Propietario: eliminacion logica del registro propietario segun el codigo de registro enviado.
+        /// </summary>
+        /// <param name="usuario">parametros del propietario</param>
+        /// <returns>valor de respuesta</returns>
+        public int Eliminar(BEUsuario usuario)
+        {
+            int iResultado;
+
+            try
+            {
+                using (NpgsqlConnection ocn = new NpgsqlConnection(Util.getConnection()))
+                {
+                    using (NpgsqlCommand ocmd = new NpgsqlCommand("public.func_delete_doc_usuario", ocn))
+                    {
+                        ocmd.CommandType = CommandType.StoredProcedure;
+                        ocmd.Parameters.Add("@p_cod_usuario", NpgsqlDbType.Varchar).Value = usuario.cod_usuario;
+                        ocmd.Parameters.Add("@p_aud_usr_modificacion", NpgsqlDbType.Varchar).Value = usuario.aud_usr_modificacion;
+
+                        ocn.Open();
+                        iResultado = ocmd.ExecuteNonQuery();
+                    }
+                    ocn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+                //estadoIngreso = false;
+            }
+
+            return iResultado;
+        }
+
+        public int Registrar(BEUsuario usuario)
+        {
+            int idRegistro = 0;
+            try
+            {
+                using (NpgsqlConnection ocn = new NpgsqlConnection(Util.getConnection()))
+                {
+                    ocn.Open();
+                    NpgsqlTransaction tran = ocn.BeginTransaction();
+                    using (NpgsqlCommand ocmd = new NpgsqlCommand("public.func_registrar_doc_usuario", ocn))
+                    {
+                        ocmd.CommandType = CommandType.StoredProcedure;
+                        ocmd.Parameters.Add("@p_ape_paterno", NpgsqlDbType.Varchar).Value = usuario.ape_paterno;
+                        ocmd.Parameters.Add("@p_ape_materno", NpgsqlDbType.Varchar).Value = usuario.ape_materno;
+                        ocmd.Parameters.Add("@p_nombres", NpgsqlDbType.Varchar).Value = usuario.nombres;
+                        ocmd.Parameters.Add("@p_correo", NpgsqlDbType.Varchar).Value = usuario.correo;
+                        ocmd.Parameters.Add("@p_cod_Area", NpgsqlDbType.Integer).Value = usuario.cod_area;
+                        ocmd.Parameters.Add("@p_cod_rol", NpgsqlDbType.Integer).Value = usuario.cod_rol;
+                        ocmd.Parameters.Add("@p_aud_usr_ingreso", NpgsqlDbType.Varchar).Value = usuario.aud_usr_ingreso;
+
+                        using (NpgsqlDataReader odr = ocmd.ExecuteReader())
+                        {
+                            while (odr.Read())
+                                idRegistro = Convert.ToInt32(odr[0]);
+                        }
+
+                    }
+                    tran.Commit();
+                    ocn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+                //estadoIngreso = false;
+            }
+            return idRegistro;
+        }
 
 
 

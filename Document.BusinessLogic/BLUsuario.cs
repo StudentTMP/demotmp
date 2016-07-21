@@ -30,6 +30,20 @@ namespace Document.BusinessLogic
             return new DAUsuario().ListarUsuarios();
         }
 
+        public int Eliminar(BEUsuario usuario)
+        {
+            return new DAUsuario().Eliminar(usuario);
+        }
+
+        public int Registrar(BEUsuario usuario)
+        {
+            return new DAUsuario().Registrar(usuario);
+        }
+
+        public int Actualizar(BEUsuario usuario)
+        {
+            return new DAUsuario().Actualizar(usuario);
+        }
 
 
     }

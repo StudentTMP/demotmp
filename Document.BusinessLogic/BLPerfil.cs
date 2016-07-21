@@ -35,5 +35,15 @@ namespace Document.BusinessLogic
             return new DAPerfil().Eliminar(perfil);
         }
 
+        public List<BEPerfil> GetPerfilesSinAsignar(string id)
+        {
+            return new DAPerfil().GetPerfilesSinAsignar(id);
+        }
+
+        public List<BEPerfil> GetPerfilesAsignados(string id)
+        {
+            return new DAPerfil().GetPerfilesAsignados(id);
+        }
+
     }
 }

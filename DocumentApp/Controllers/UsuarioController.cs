@@ -80,56 +80,60 @@ namespace DocumentApp.Controllers
             return Json(Usuarios, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Actualizar(string code, string descripcion)
+        public ActionResult Actualizar(string code, string glsUsuario, string glsApellidoPaterno, string glsApellidoMaterno, string glsNombres, string glsCorreo, int codArea, int codRol)
         {
             UsuarioLoginViewModel UsuarioActual;
             UsuarioActual = (UsuarioLoginViewModel)Session["objUsuario"];
 
-            //BEUsuario usuario = new BEUsuario();
-            //propietario.cod_propietario = Convert.ToInt16(code);
-            //propietario.gls_propietario = descripcion;
-            //propietario.aud_usr_modificacion = UsuarioActual.Codigo;
+            BEUsuario usuario = new BEUsuario();
+            usuario.cod_usuario = code;
+            usuario.ape_materno = glsApellidoMaterno;
+            usuario.ape_paterno = glsApellidoPaterno;
+            usuario.nombres = glsNombres;
+            usuario.correo = glsCorreo;
+            usuario.cod_area = codArea;
+            usuario.cod_rol = codRol;
+            usuario.aud_usr_modificacion = UsuarioActual.Codigo;
 
-            //BLPropietario oBLPropietario = new BLPropietario();
-            //int iResultado = oBLPropietario.Actualizar(propietario);
+            BLUsuario oBLUsuario = new BLUsuario();
+            int iResultado = oBLUsuario.Actualizar(usuario);
 
             return RedirectToAction("ConsultaUsuario", "Usuario");
         }
 
         public JsonResult Eliminar(string code)
         {
-            //UsuarioLoginViewModel UsuarioActual;
-            //UsuarioActual = (UsuarioLoginViewModel)Session["objUsuario"];
+            UsuarioLoginViewModel UsuarioActual;
+            UsuarioActual = (UsuarioLoginViewModel)Session["objUsuario"];
 
-            //BEPropietario propietario = new BEPropietario();
-            //propietario.cod_propietario = Convert.ToInt16(code);
-            //propietario.aud_usr_modificacion = UsuarioActual.Codigo;
+            BEUsuario usuario = new BEUsuario();
+            usuario.cod_usuario = code;
+            usuario.aud_usr_modificacion = UsuarioActual.Codigo;
 
-            //BLPropietario oBLPropietario = new BLPropietario();
-            //int iResultado = oBLPropietario.Eliminar(propietario);
+            BLUsuario oBLUsuario = new BLUsuario();
+            int iResultado = oBLUsuario.Eliminar(usuario);
 
             return Json(1, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetPerfilesAsignadosUsuarios(string id)
         {
-            List<PerfilViewModel> Lista = new List<PerfilViewModel>();
-            PerfilViewModel perfil;
+            List<Perfil> listaPerfiles = new List<Perfil>();
+            Perfil perfil;
 
             List<BEPerfil> oListaPerfil;
-            BLTipoDocumento oBLTipoDocumento = new BLTipoDocumento();
-            //oListaTipoDocumento = oBLTipoDocumento.ListarTipoDocumento();
+            BLPerfil oBLPerfil = new BLPerfil();
 
-            //foreach (BETipoDocumento item in oListaTipoDocumento)
-            //{
-            //    tipoDocumento = new TipoDocumentoViewModel();
-            //    tipoDocumento.codigo = item.cod_tipo_documento;
-            //    tipoDocumento.descripcion = item.gls_tipo_documento;
-            //    tipoDocumento.estado = item.cod_estado_registro;
-            //    Lista.Add(tipoDocumento);
-            //}
+            oListaPerfil = oBLPerfil.GetPerfilesAsignados(id);
 
-            return Json(Lista, JsonRequestBehavior.AllowGet);
+            foreach (BEPerfil item in oListaPerfil)
+            {
+                perfil = new Perfil();
+                perfil.Id = item.cod_perfil;
+                perfil.Descripcion = item.gls_perfil;
+                listaPerfiles.Add(perfil);
+            }
+            return Json(listaPerfiles, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetAllAreas()
@@ -173,5 +177,26 @@ namespace DocumentApp.Controllers
 
             return Json(Lista, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult GetPerfilesSinAsignar(string id)
+        {
+            var listaPerfiles = new List<Perfil>();
+            Perfil perfil;
+
+            List<BEPerfil> oListaPerfil;
+            BLPerfil oBLPerfil = new BLPerfil();
+            oListaPerfil = oBLPerfil.GetPerfilesSinAsignar(id);
+
+            foreach(BEPerfil item in oListaPerfil)
+            {
+                perfil = new Perfil();
+                perfil.Id = item.cod_perfil;
+                perfil.Descripcion = item.gls_perfil;
+                listaPerfiles.Add(perfil);
+            }
+
+            return Json(listaPerfiles, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }
